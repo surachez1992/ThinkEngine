@@ -1,312 +1,312 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Think Engine — Scenario Analysis</title>
-  <meta name="description" content="Think Engine — Scenario & Expected Value Analysis Tool">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Think Engine — Scenario Analysis</title>
+<meta name="description" content="Think Engine — Scenario & Expected Value Analysis Tool">
 
-  <meta name="theme-color" content="#0e1117">
+<meta name="theme-color" content="#0e1117">
 
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
 
-  <link rel="manifest" href="manifest.json">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Think Engine">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Think Engine">
 
-  <style>
-  :root{
-    /* Colors */
-    --bg:#0e1117;
-    --panel:#161b22;
-    --card:#1f2633;
-    --muted:#8b949e;
-    --accent:#e5533d;
-    --positive:#2ea043;
-    --negative:#f85149;
-    --error-bg:#f8514930;
-    --error-text:#f85149;
-    
-    /* Font sizes */
-    --font-size-base: 15px;
-    --font-size-small: 13px;
-    --padding-base: 16px;
-    --gap-base: 16px;
-  }
+<style>
+:root{
+/* Colors */
+--bg:#0e1117;
+--panel:#161b22;
+--card:#1f2633;
+--muted:#8b949e;
+--accent:#e5533d;
+--positive:#2ea043;
+--negative:#f85149;
+--error-bg:#f8514930;
+--error-text:#f85149;
 
-  /* Base Reset & Typography */
-  *{box-sizing:border-box}
+/* Font sizes */
+--font-size-base: 15px;
+--font-size-small: 13px;
+--padding-base: 16px;
+--gap-base: 16px;
+}
 
-  body{
-    margin:0;
-    font-family:system-ui,-apple-system,sans-serif;
-    background:var(--bg);
-    color:#fff;
-    font-size: var(--font-size-base);
-  }
+/* Base Reset & Typography */
+*{box-sizing:border-box}
 
-  /* Layout */
-  .wrapper{
-    max-width:800px; /* เพิ่ม max-width ให้รองรับจอใหญ่ขึ้น */
-    margin:auto;
-    padding:var(--padding-base);
-  }
+body{
+margin:0;
+font-family:system-ui,-apple-system,sans-serif;
+background:var(--bg);
+color:#fff;
+font-size: var(--font-size-base);
+}
 
-  .header{
-    text-align:center;
-    margin-bottom:24px; /* ปรับ margin */
-  }
-  .header h1{
-    margin:0;
-    font-size:26px;
-  }
-  .header p{
-    margin:6px 0 0;
-    font-size:var(--font-size-small);
-    color:var(--muted);
-  }
+/* Layout */
+.wrapper{
+max-width:800px; /* เพิ่ม max-width ให้รองรับจอใหญ่ขึ้น */
+margin:auto;
+padding:var(--padding-base);
+}
 
-  .section{
-    background:var(--panel);
-    border-radius:16px;
-    padding:var(--padding-base);
-    margin-bottom:var(--gap-base);
-  }
+.header{
+text-align:center;
+margin-bottom:24px; /* ปรับ margin */
+}
+.header h1{
+margin:0;
+font-size:26px;
+}
+.header p{
+margin:6px 0 0;
+font-size:var(--font-size-small);
+color:var(--muted);
+}
 
-  /* Match Card */
-  .match{
-    background:var(--card);
-    border-radius:14px;
-    padding:14px;
-    margin-bottom:12px;
-    position: relative;
-    padding-top: 30px; /* เพิ่มพื้นที่ด้านบนสำหรับปุ่มลบ */
-  }
+.section{
+background:var(--panel);
+border-radius:16px;
+padding:var(--padding-base);
+margin-bottom:var(--gap-base);
+}
 
-  .remove-match {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    width: 30px; /* ทำให้กดง่ายขึ้นบนมือถือ */
-    height: 30px; /* ทำให้กดง่ายขึ้นบนมือถือ */
-    background: none;
-    border: none;
-    color: var(--muted);
-    font-size: 20px; /* ปรับขนาดไอคอน */
-    cursor: pointer;
-    line-height: 1;
-    border-radius: 50%;
-    transition: background 0.2s, color 0.2s;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .remove-match:hover {
-    background: rgba(248, 81, 73, 0.2);
-    color: var(--negative);
-  }
+/* Match Card */
+.match{
+background:var(--card);
+border-radius:14px;
+padding:14px;
+margin-bottom:12px;
+position: relative;
+padding-top: 30px; /* เพิ่มพื้นที่ด้านบนสำหรับปุ่มลบ */
+}
 
-  /* Input Grids - MOBILE FIRST */
-  .grid{
-    display:grid;
-    grid-template-columns:1fr; /* บนมือถือ: 1 คอลัมน์ */
-    gap:8px;
-    margin-bottom: 8px;
-  }
-  .grid-two{
-    display:grid;
-    grid-template-columns:1fr; /* บนมือถือ: 1 คอลัมน์ */
-    gap:8px;
-  }
-  .grid-input-group {
-    display: grid;
-    grid-template-columns: 1fr 100px; /* ชื่อ input 1fr, Odds 100px */
-    gap: 8px;
-  }
-  
-  /* Media Query for Tablets and Desktops */
-  @media (min-width: 600px) {
-    .match {
-        padding-top: 14px; /* ลดพื้นที่ด้านบนเมื่อไม่ใช่จอมือถือ */
-    }
-    .remove-match {
-        top: 10px;
-        right: 10px;
-        width: 24px;
-        height: 24px;
-        font-size: 16px;
-    }
-    .grid{
-        /* บนจอใหญ่: ชื่อ/Odds ของ A และ B อยู่ในแถวเดียวกัน */
-        grid-template-columns: 1fr 90px;
-        gap:12px;
-    }
-    .grid-two{
-        /* บนจอใหญ่: Stake ยังคงเป็น 1 คอลัมน์ */
-        grid-template-columns:1fr;
-    }
-    .grid-input-group {
-        grid-template-columns: 1fr 90px;
-    }
-    .actions{
-        gap: 20px !important;
-    }
-  }
+.remove-match {
+position: absolute;
+top: 5px;
+right: 5px;
+width: 30px; /* ทำให้กดง่ายขึ้นบนมือถือ */
+height: 30px; /* ทำให้กดง่ายขึ้นบนมือถือ */
+background: none;
+border: none;
+color: var(--muted);
+font-size: 20px; /* ปรับขนาดไอคอน */
+cursor: pointer;
+line-height: 1;
+border-radius: 50%;
+transition: background 0.2s, color 0.2s;
+z-index: 10;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+.remove-match:hover {
+background: rgba(248, 81, 73, 0.2);
+color: var(--negative);
+}
+
+/* Input Grids - MOBILE FIRST */
+.grid{
+display:grid;
+grid-template-columns:1fr; /* บนมือถือ: 1 คอลัมน์ */
+gap:8px;
+margin-bottom: 8px;
+}
+.grid-two{
+display:grid;
+grid-template-columns:1fr; /* บนมือถือ: 1 คอลัมน์ */
+gap:8px;
+}
+.grid-input-group {
+display: grid;
+grid-template-columns: 1fr 100px; /* ชื่อ input 1fr, Odds 100px */
+gap: 8px;
+}
+
+/* Media Query for Tablets and Desktops */
+@media (min-width: 600px) {
+.match {
+padding-top: 14px; /* ลดพื้นที่ด้านบนเมื่อไม่ใช่จอมือถือ */
+}
+.remove-match {
+top: 10px;
+right: 10px;
+width: 24px;
+height: 24px;
+font-size: 16px;
+}
+.grid{
+/* บนจอใหญ่: ชื่อ/Odds ของ A และ B อยู่ในแถวเดียวกัน */
+grid-template-columns: 1fr 90px;
+gap:12px;
+}
+.grid-two{
+/* บนจอใหญ่: Stake ยังคงเป็น 1 คอลัมน์ */
+grid-template-columns:1fr;
+}
+.grid-input-group {
+grid-template-columns: 1fr 90px;
+}
+.actions{
+gap: 20px !important;
+}
+}
 
 
-  .vs{
-    text-align:center;
-    font-size:var(--font-size-small);
-    color:var(--muted);
-    margin:8px 0; /* ปรับ margin */
-  }
+.vs{
+text-align:center;
+font-size:var(--font-size-small);
+color:var(--muted);
+margin:8px 0; /* ปรับ margin */
+}
 
-  /* Input Styling */
-  input{
-    width:100%;
-    padding:12px; /* เพิ่ม padding ให้กดง่ายขึ้นบนมือถือ */
-    border-radius:10px;
-    border:none;
-    background:#0d1117;
-    color:#fff;
-    font-size:var(--font-size-base);
-  }
-  input::placeholder{color:#6e7681}
+/* Input Styling */
+input{
+width:100%;
+padding:12px; /* เพิ่ม padding ให้กดง่ายขึ้นบนมือถือ */
+border-radius:10px;
+border:none;
+background:#0d1117;
+color:#fff;
+font-size:var(--font-size-base);
+}
+input::placeholder{color:#6e7681}
 
-  /* Buttons */
-  .actions{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-    margin-top:12px;
-  }
-  
-  #addMatchBtn {
-      width: 100%;
-      padding: 12px;
-      margin-top: 10px;
-      background: #21262d;
-      color: var(--muted);
-      border: 1px dashed #30363d;
-      border-radius: 14px;
-      cursor: pointer;
-      font-size: var(--font-size-base);
-      transition: background 0.2s, color 0.2s;
-  }
-  #addMatchBtn:hover {
-      background: #30363d;
-      color: #fff;
-  }
+/* Buttons */
+.actions{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+margin-top:12px;
+}
 
-  button{
-    padding:14px;
-    border:none;
-    border-radius:14px;
-    font-size:var(--font-size-base);
-    cursor:pointer;
-    transition: opacity 0.2s;
-  }
-  button:active {
-      opacity: 0.8;
-  }
+#addMatchBtn {
+width: 100%;
+padding: 12px;
+margin-top: 10px;
+background: #21262d;
+color: var(--muted);
+border: 1px dashed #30363d;
+border-radius: 14px;
+cursor: pointer;
+font-size: var(--font-size-base);
+transition: background 0.2s, color 0.2s;
+}
+#addMatchBtn:hover {
+background: #30363d;
+color: #fff;
+}
 
-  .calc{
-    background:var(--accent);
-    color:#fff;
-    font-weight: 600;
-  }
-  .clear{
-    background:#21262d;
-    color:#fff;
-  }
+button{
+padding:14px;
+border:none;
+border-radius:14px;
+font-size:var(--font-size-base);
+cursor:pointer;
+transition: opacity 0.2s;
+}
+button:active {
+opacity: 0.8;
+}
 
-  /* Result Summary */
-  .summary{
-    background:linear-gradient(135deg,#1f2633,#161b22);
-    border-radius:16px;
-    padding:var(--padding-base);
-    margin-bottom:var(--gap-base);
-    font-size:var(--font-size-base);
-  }
-  .summary b.average-ev-positive { color: var(--positive); }
-  .summary b.average-ev-negative { color: var(--negative); }
-  .summary span{
-    display:block;
-    margin-top:6px;
-    color:var(--muted);
-    font-size: var(--font-size-small);
-  }
+.calc{
+background:var(--accent);
+color:#fff;
+font-weight: 600;
+}
+.clear{
+background:#21262d;
+color:#fff;
+}
 
-  /* Scenario Card */
-  .card{
-    background:var(--card);
-    border-radius:14px;
-    padding:14px;
-    margin-bottom:10px;
-    font-size:var(--font-size-small);
-    line-height:1.45;
-  }
+/* Result Summary */
+.summary{
+background:linear-gradient(135deg,#1f2633,#161b22);
+border-radius:16px;
+padding:var(--padding-base);
+margin-bottom:var(--gap-base);
+font-size:var(--font-size-base);
+}
+.summary b.average-ev-positive { color: var(--positive); }
+.summary b.average-ev-negative { color: var(--negative); }
+.summary span{
+display:block;
+margin-top:6px;
+color:var(--muted);
+font-size: var(--font-size-small);
+}
 
-  .positive{border-left:4px solid var(--positive)}
-  .negative{border-left:4px solid var(--negative)}
+/* Scenario Card */
+.card{
+background:var(--card);
+border-radius:14px;
+padding:14px;
+margin-bottom:10px;
+font-size:var(--font-size-small);
+line-height:1.45;
+}
 
-  .metric{
-    display:flex;
-    justify-content:space-between;
-    margin-top:6px;
-    font-size:var(--font-size-small);
-  }
-  .metric span{color:var(--muted)}
-  .metric b{font-weight:600}
+.positive{border-left:4px solid var(--positive)}
+.negative{border-left:4px solid var(--negative)}
 
-  /* Error Message */
-  .error-message {
-    background:var(--error-bg);
-    color:var(--error-text);
-    padding:14px;
-    border-radius:14px;
-    margin-bottom:var(--gap-base);
-    font-size:var(--font-size-small);
-    border:1px solid var(--error-text);
-  }
+.metric{
+display:flex;
+justify-content:space-between;
+margin-top:6px;
+font-size:var(--font-size-small);
+}
+.metric span{color:var(--muted)}
+.metric b{font-weight:600}
 
-  .footer-space{height:24px}
-  </style>
+/* Error Message */
+.error-message {
+background:var(--error-bg);
+color:var(--error-text);
+padding:14px;
+border-radius:14px;
+margin-bottom:var(--gap-base);
+font-size:var(--font-size-small);
+border:1px solid var(--error-text);
+}
+
+.footer-space{height:24px}
+</style>
 </head>
 
-<body onload="initializeMatches()">
+<body>
 <div class="wrapper">
 
-  <div class="header">
-    <h1>Think Engine</h1>
-    <p>เครื่องมือวิเคราะห์ Scenario & Expected Value (Parley)</p>
-  </div>
-  
-  <div class="section">
-    <b>คะแนนเดิมพัน (Stake)</b>
-    <div class="grid-two" style="margin-top:10px;">
-        <input id="totalStakeInput" type="number" step="1" placeholder="Stake (คะแนนรวม)" min="1" oninput="saveData()">
-    </div>
-  </div>
+<div class="header">
+<h1>Think Engine</h1>
+<p>เครื่องมือวิเคราะห์ Scenario & Expected Value (Parley)</p>
+</div>
 
-  <div class="section">
-    <b>คู่แข่งขัน / เหตุการณ์</b>
-    <div id="matches">
-        </div>
-    <button id="addMatchBtn" onclick="addMatch()">+ เพิ่มคู่แข่งขัน</button>
-  </div>
+<div class="section">
+<b>คะแนนเดิมพัน (Stake)</b>
+<div class="grid-two" style="margin-top:10px;">
+<input id="totalStakeInput" type="number" step="1" placeholder="Stake (คะแนนรวม)" min="1" oninput="saveData()">
+</div>
+</div>
 
-  <div class="actions">
-    <button class="calc" onclick="calculate()">คำนวณเชิงสถิติ</button>
-    <button class="clear" onclick="resetAll()">ล้างค่า</button>
-  </div>
+<div class="section">
+<b>คู่แข่งขัน / เหตุการณ์</b>
+<div id="matches">
+</div>
+<button id="addMatchBtn" onclick="addMatch()">+ เพิ่มคู่แข่งขัน</button>
+</div>
 
-  <div id="result"></div>
+<div class="actions">
+<button class="calc" onclick="calculate()">คำนวณเชิงสถิติ</button>
+<button class="clear" onclick="resetAll()">ล้างค่า</button>
+</div>
 
-  <div class="footer-space"></div>
+<div id="result"></div>
+
+<div class="footer-space"></div>
 </div>
 
 <script>
@@ -318,99 +318,263 @@ const LOCAL_STORAGE_KEY = 'thinkEngineData';
 let matchCounter = 0;
 
 /**
- * ฟังก์ชันบันทึกข้อมูล Input ทั้งหมดลงใน Local Storage
- */
+* ฟังก์ชันบันทึกข้อมูล Input ทั้งหมดลงใน Local Storage
+*/
 function saveData() {
-    const matches = document.querySelectorAll(".match");
-    let matchData = [];
+const matches = document.querySelectorAll(".match");
+let matchData = [];
 
-    matches.forEach(m => {
-        const i = m.querySelectorAll("input");
-        matchData.push({
-            id: m.id,
-            A: i[0].value,
-            OddsA: i[1].value,
-            B: i[2].value,
-            OddsB: i[3].value,
-        });
-    });
+matches.forEach(m => {
+const i = m.querySelectorAll("input");
+matchData.push({
+id: m.id,
+A: i[0].value,
+OddsA: i[1].value,
+B: i[2].value,
+OddsB: i[3].value,
+});
+});
 
-    const data = {
-        stake: totalStakeInput.value,
-        matches: matchData
-    };
-    
-    try {
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
-    } catch (e) {
-        console.error("Local Storage Save Error:", e);
-    }
+const data = {
+stake: totalStakeInput.value,
+matches: matchData
+};
+
+try {
+localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
+} catch (e) {
+console.error("Local Storage Save Error:", e);
+}
 }
 
 /**
- * ฟังก์ชันสร้าง HTML ของคู่แข่งขันใหม่
- * @param {string} id - ID ของ Match
- * @param {object} values - ค่าเริ่มต้นสำหรับ input fields
- */
+* ฟังก์ชันสร้าง HTML ของคู่แข่งขันใหม่
+* @param {string} id - ID ของ Match
+* @param {object} values - ค่าเริ่มต้นสำหรับ input fields
+*/
 function createMatchHTML(id, values = {}) {
-    const defaultA = values.A || ""; 
-    const defaultOddsA = values.OddsA || "";
-    const defaultB = values.B || ""; 
-    const defaultOddsB = values.OddsB || "";
+const defaultA = values.A || "";
+const defaultOddsA = values.OddsA || "";
+const defaultB = values.B || "";
+const defaultOddsB = values.OddsB || "";
 
-    // ปรับโครงสร้าง input ภายในเพื่อให้ง่ายต่อการจัดการ Responsive
-    return `
-    <div class="match" id="${id}">
-        <button class="remove-match" onclick="removeMatch('${id}')">×</button>
-        
-        <div class="grid-input-group">
-            <input placeholder="ทีม A / Scenario A" value="${defaultA}" oninput="saveData()">
-            <input type="number" step="0.01" placeholder="Odds A" min="1.01" value="${defaultOddsA}" oninput="saveData()">
-        </div>
-        
-        <div class="vs">VS</div>
-        
-        <div class="grid-input-group">
-            <input placeholder="ทีม B / Scenario B" value="${defaultB}" oninput="saveData()">
-            <input type="number" step="0.01" placeholder="Odds B" min="1.01" value="${defaultOddsB}" oninput="saveData()">
-        </div>
-    </div>`;
+// ปรับโครงสร้าง input ภายในเพื่อให้ง่ายต่อการจัดการ Responsive
+return `
+<div class="match" id="${id}">
+<button class="remove-match" onclick="removeMatch('${id}')">×</button>
+
+<div class="grid-input-group">
+<input placeholder="ทีม A / Scenario A" value="${defaultA}" oninput="saveData()">
+<input type="number" step="0.01" placeholder="Odds A" min="1.01" value="${defaultOddsA}" oninput="saveData()">
+</div>
+
+<div class="vs">VS</div>
+
+<div class="grid-input-group">
+<input placeholder="ทีม B / Scenario B" value="${defaultB}" oninput="saveData()">
+<input type="number" step="0.01" placeholder="Odds B" min="1.01" value="${defaultOddsB}" oninput="saveData()">
+</div>
+</div>`;
 }
 
 /**
- * ฟังก์ชันเพิ่มคู่แข่งขันใหม่
- */
+* ฟังก์ชันเพิ่มคู่แข่งขันใหม่
+*/
 function addMatch() {
-    const newId = `match-${matchCounter++}`;
-    matchesDiv.insertAdjacentHTML('beforeend', createMatchHTML(newId));
-    resultDiv.innerHTML = "";
-    saveData();
+const newId = `match-${matchCounter++}`;
+matchesDiv.insertAdjacentHTML('beforeend', createMatchHTML(newId));
+resultDiv.innerHTML = "";
+saveData();
 }
 
 /**
- * ฟังก์ชันลบคู่แข่งขัน
- */
+* ฟังก์ชันลบคู่แข่งขัน
+*/
 function removeMatch(id) {
-    const matchElement = document.getElementById(id);
-    if (matchElement) {
-        matchElement.remove();
-        resultDiv.innerHTML = "";
-        saveData();
-    }
+const matchElement = document.getElementById(id);
+if (matchElement) {
+matchElement.remove();
+resultDiv.innerHTML = "";
+saveData();
+}
 }
 
 /**
- * ฟังก์ชันเริ่มต้น: โหลดข้อมูลจาก Local Storage หรือสร้างคู่เริ่มต้น
- */
+* ฟังก์ชันเริ่มต้น: โหลดข้อมูลจาก Local Storage หรือสร้างคู่เริ่มต้น
+*/
 function initializeMatches() {
-    let savedData = null;
-    try {
-        const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
-        if (stored) {
-            savedData = JSON.parse(stored);
-        }
-    } catch (e) {
-        console.error("Local Storage Load Error:", e);
-    }
+let savedData = null;
+try {
+const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
+if (stored) {
+savedData = JSON.parse(stored);
+}
+} catch (e) {
+console.error("Local Storage Load Error:", e);
+}
 
-    // 1. โหลด Sta
+// 1. โหลด Stake
+if (savedData && savedData.stake) {
+totalStakeInput.value = savedData.stake;
+}
+
+// 2. โหลด Matches
+if (savedData && savedData.matches && savedData.matches.length > 0) {
+savedData.matches.forEach(match => {
+if (match.id) {
+const num = parseInt(match.id.split('-')[1]);
+if (!isNaN(num) && num >= matchCounter) {
+matchCounter = num + 1;
+}
+}
+// ใช้ค่าที่โหลดมา (match.A/match.B) เป็น value เพื่อให้ข้อมูลเก่าแสดงขึ้นมา
+matchesDiv.insertAdjacentHTML('beforeend', createMatchHTML(match.id || `match-${matchCounter++}`, {
+A: match.A,
+OddsA: match.OddsA,
+B: match.B,
+OddsB: match.OddsB
+}));
+});
+} else {
+// สร้าง 3 คู่เริ่มต้นถ้าไม่มีข้อมูลใน Local Storage
+for(let i = 0; i < 3; i++) {
+addMatch();
+}
+}
+}
+
+
+/**
+* ฟังก์ชันหลักในการคำนวณ Scenario Analysis และ Expected Value (EV)
+*/
+function calculate(){
+const matches = document.querySelectorAll(".match");
+const totalStake = +totalStakeInput.value;
+let data = [];
+let validationError = "";
+
+resultDiv.innerHTML = "";
+
+if (totalStake < 1 || isNaN(totalStake)) {
+resultDiv.innerHTML = `<div class="error-message">❌ กรุณากรอก "คะแนนเดิมพัน (Stake)" ที่ถูกต้อง (ต้องเป็นตัวเลขและมากกว่า 0)</div>`;
+return;
+}
+
+matches.forEach((m, index) => {
+// เนื่องจากเปลี่ยนโครงสร้าง input ใน createMatchHTML ต้องอ้างอิงลำดับใหม่
+const i = m.querySelectorAll("input");
+const A_name = i[0].value.trim() || "";
+const A_odds = +i[1].value;
+const B_name = i[2].value.trim() || "";
+const B_odds = +i[3].value;
+
+if (A_odds > 0 && B_odds > 0) {
+
+if (A_odds <= 1.00 || B_odds <= 1.00) {
+validationError = `⚠️ Odds ต้องมีค่ามากกว่า 1.00 (เช่น 1.01 ขึ้นไป) ในคู่ที่ ${index + 1}`;
+return;
+}
+
+data.push({
+A: A_name, Am: A_odds, Pa: 1 / A_odds,
+B: B_name, Bm: B_odds, Pb: 1 / B_odds,
+});
+}
+});
+
+if (validationError) {
+resultDiv.innerHTML = `<div class="error-message">${validationError}</div>`;
+return;
+}
+
+if (data.length === 0) {
+resultDiv.innerHTML = `<div class="error-message">❌ กรุณากรอก Odds อย่างน้อย 1 คู่</div>`;
+return;
+}
+
+let scenarios = [];
+let totalAverageEV = 0;
+
+function walk(idx, label, multi, prob){
+if(idx === data.length){
+const ret = multi * totalStake;
+const ev = ret - totalStake;
+
+totalAverageEV += ev * prob;
+
+scenarios.push({
+label: label.trim().replace(/\|$/, '').trim() || `Scenario ${scenarios.length + 1}`,
+multi,
+ret,
+ev,
+prob,
+roi: (ev / totalStake) * 100
+});
+return;
+}
+
+// Scenario A: ใช้ชื่อทีมถ้ามี หรือใช้ชื่อ default
+const currentALabel = data[idx].A || `Match ${idx + 1} A`;
+walk(idx + 1, label + currentALabel + " | ", multi * data[idx].Am, prob * data[idx].Pa);
+
+// Scenario B: ใช้ชื่อทีมถ้ามี หรือใช้ชื่อ default
+const currentBLabel = data[idx].B || `Match ${idx + 1} B`;
+walk(idx + 1, label + currentBLabel + " | ", multi * data[idx].Bm, prob * data[idx].Pb);
+}
+
+walk(0, "", 1, 1);
+
+const maxGain = Math.max(...scenarios.map(s => s.ev));
+const maxLoss = Math.min(...scenarios.map(s => s.ev));
+
+const avgEvClass = totalAverageEV >= 0 ? "average-ev-positive" : "average-ev-negative";
+
+// Sorting: เรียงลำดับจาก EV สูงสุดลงมา
+scenarios.sort((a,b) => b.ev - a.ev);
+
+resultDiv.innerHTML = `
+<div class="summary">
+<b>Summary</b>
+<span>Scenarios: ${scenarios.length}</span>
+<span>Stake: ${totalStake.toFixed(2)} หน่วย</span>
+<span>Max Gain: ${maxGain.toFixed(2)} หน่วย</span>
+<span>Max Loss: ${maxLoss.toFixed(2)} หน่วย</span>
+<hr style="border:0;border-top:1px solid #21262d;margin:8px 0;">
+<span>Average Expected Value (EV)</span>
+<b class="${avgEvClass}">${totalAverageEV.toFixed(2)} หน่วย</b>
+</div>
+` + scenarios
+.map(s => `
+<div class="card ${s.ev >= 0 ? "positive" : "negative"}">
+<b>${s.label}</b>
+<div class="metric"><span>Probability</span><b>${(s.prob * 100).toFixed(2)}%</b></div>
+<div class="metric"><span>Multiplier</span><b>${s.multi.toFixed(4)}</b></div>
+<div class="metric"><span>Return</span><b>${s.ret.toFixed(3)} หน่วย</b></div>
+<div class="metric"><span>EV</span><b>${s.ev.toFixed(3)} หน่วย</b></div>
+<div class="metric"><span>ROI</span><b>${s.roi.toFixed(2)}%</b></div>
+</div>`).join("");
+}
+
+function resetAll(){
+try {
+localStorage.removeItem(LOCAL_STORAGE_KEY);
+} catch (e) {
+console.error("Local Storage Clear Error:", e);
+}
+
+document.querySelectorAll("input").forEach(i => i.value = "");
+matchesDiv.innerHTML = "";
+resultDiv.innerHTML = "";
+matchCounter = 0;
+
+// initializeMatches(); // เราจะเรียกมันจากด้านล่างแทน
+window.location.reload(); // รีโหลดหน้าเพื่อรีเซ็ตทั้งหมด
+}
+
+// *** การแก้ไขปัญหา ReferenceError ***
+// ลบ body onload="initializeMatches()" ออกจากแท็ก <body> แล้วเรียกฟังก์ชันนี้หลังจาก DOM โหลดเสร็จแทน
+document.addEventListener('DOMContentLoaded', initializeMatches);
+
+</script>
+</body>
+</html>
