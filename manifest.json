@@ -1,0 +1,32 @@
+﻿{
+  "name": "Think Engine",
+  "short_name": "Think Engine",
+  "description": "Think Engine — Scenario & Expected Value Analysis Tool",
+  "start_url": "./",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#0e1117",
+  "background_color": "#0e1117",
+  "icons": [
+    {
+      "src": "favicon-32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
