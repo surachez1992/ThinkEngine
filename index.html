@@ -1,257 +1,713 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Think Engine — Strategic Analysis</title>
-<meta name="description" content="Think Engine — Scenario & Expected Value Analysis Tool">
-<meta name="theme-color" content="#0e1117">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Think Engine v3 — Premium Strategic Analysis</title>
+  <meta name="description" content="Think Engine — Premium Scenario & Expected Value Analysis Tool">
+  <meta name="theme-color" content="#0e1117">
 
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
-<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
-<link rel="manifest" href="manifest.json">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Think Engine">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Think Engine">
 
-<style>
-:root{
---bg:#0e1117;
---panel:#161b22;
---card:#1f2633;
---muted:#8b949e;
---accent:#e5533d;
---positive:#2ea043;
---negative:#f85149;
---color-a: #ff4d4d;
---color-b: #4d94ff;
---font-size-base: 15px;
---font-size-small: 13px;
---padding-base: 16px;
-}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-*{box-sizing:border-box}
-body{
-margin:0; font-family:system-ui,-apple-system,sans-serif;
-background:var(--bg); color:#fff; font-size: var(--font-size-base);
-}
+  <style>
+  :root{
+    --bg:#0e1117;
+    --panel:#161b22;
+    --card:#1f2633;
+    --muted:#8b949e;
+    --accent:#e5533d;
+    --accent-dim: rgba(229, 83, 61, 0.15);
+    --positive:#2ea043;
+    --negative:#f85149;
+    --gold:#ffcc00;
+    --gold-dim: rgba(255, 204, 0, 0.08);
+    --color-a: #ff4d4d;
+    --color-b: #4d94ff;
+    --border:#30363d;
+    --font-size-base: 15px;
+    --font-size-small: 13px;
+    --padding-base: 16px;
+  }
 
-.wrapper{ max-width:800px; margin:auto; padding:var(--padding-base); }
-.header{ text-align:center; margin-bottom:24px; }
-.header h1{ margin:0; font-size:26px; }
-.header p{ margin:6px 0 0; font-size:var(--font-size-small); color:var(--muted); }
+  *{box-sizing:border-box; transition: all 0.2s ease;}
+  
+  body{
+    margin:0; font-family:system-ui,-apple-system,sans-serif;
+    background:var(--bg); color:#fff; font-size: var(--font-size-base);
+    padding-bottom: 60px;
+  }
 
-.section{
-background:var(--panel); border-radius:16px; padding:var(--padding-base); margin-bottom:16px;
-}
+  /* Premium Top Head Bar & User Tab Profile */
+  .top-navbar {
+    background: linear-gradient(90deg, #161b22 0%, #0d1117 100%);
+    border-bottom: 2px solid var(--accent);
+    padding: 12px var(--padding-base);
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  .nav-container {
+    max-width: 800px; margin: auto;
+    display: flex; justify-content: space-between; align-items: center;
+    position: relative;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand-logo {
+    background: var(--accent); color: #fff; font-weight: 800;
+    padding: 6px 12px; border-radius: 8px; font-size: 14px; letter-spacing: 0.5px;
+  }
+  .brand-title h1 { margin: 0; font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
+  .brand-title p { margin: 2px 0 0 0; font-size: 11px; color: var(--muted); }
 
-.match{
-background:var(--card); border-radius:14px; padding:14px; margin-bottom:12px;
-position: relative; padding-top: 30px;
-}
+  /* User Dropdown Profile Styles */
+  .user-menu-wrapper { position: relative; }
+  
+  /* ขาวล้วนมินิมอล ทันสมัย รองรับรูปภาพแบบ Dynamic */
+  .user-trigger-btn {
+    background: #1f2633; border: 1px solid var(--border); color: #fff;
+    width: 42px; height: 42px; border-radius: 50%; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; padding: 0;
+    overflow: hidden; position: relative;
+  }
+  .user-trigger-btn:hover { border-color: var(--accent); background: #263042; }
+  
+  /* สไตล์ SVG ขาวล้วน */
+  .user-svg-icon {
+    width: 20px; height: 20px; fill: #ffffff; display: block;
+  }
+  
+  /* ส่วนแสดงผลรูปโปรไฟล์ที่อัปโหลด */
+  .avatar-preview-img {
+    width: 100%; height: 100%; object-fit: cover; display: none;
+  }
+  
+  .user-dropdown-panel {
+    position: absolute; top: 52px; right: 0; width: 270px;
+    background: #161b22; border: 1px solid var(--border); border-radius: 14px;
+    padding: var(--padding-base); box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    display: none; z-index: 110;
+  }
+  .user-dropdown-panel.show { display: block; animation: fadeIn 0.2s ease-out; }
+  
+  .user-info-title { font-size: 13px; color: var(--muted); font-weight: 600; margin-bottom: 4px; }
+  .user-name { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+  .user-name::before { content: "🥊"; }
+  
+  /* ระบบอัปโหลดรูปภาพโปรไฟล์ */
+  .upload-avatar-zone {
+    margin-bottom: 14px; padding: 8px; background: #0d1117; 
+    border: 1px dashed var(--border); border-radius: 8px; text-align: center;
+  }
+  .upload-avatar-label {
+    display: block; font-size: 12px; color: var(--muted); cursor: pointer; font-weight: 600;
+  }
+  .upload-avatar-label:hover { color: var(--accent); }
+  .upload-avatar-zone input[type="file"] { display: none; }
 
-.remove-match {
-position: absolute; top: 5px; right: 5px; width: 30px; height: 30px;
-background: none; border: none; color: var(--muted); font-size: 20px;
-cursor: pointer; display: flex; align-items: center; justify-content: center;
-}
+  .credit-card-box {
+    background: linear-gradient(135deg, #1f2633 0%, #11151d 100%);
+    border: 1px solid rgba(255,204,0,0.2); border-radius: 10px; padding: 12px; margin-bottom: 14px;
+  }
+  .credit-label { font-size: 11px; color: var(--gold); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  .credit-amount { font-size: 22px; font-weight: 800; color: #fff; margin-top: 2px; }
+  .credit-amount span { font-size: 12px; color: var(--muted); font-weight: normal; margin-left: 4px; }
+  
+  .deposit-btn {
+    width: 100%; padding: 10px; background: var(--positive); color: #fff; border: none;
+    border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; text-align: center;
+  }
+  .deposit-btn:hover { opacity: 0.9; transform: translateY(-1px); }
 
-.grid-input-group { display: grid; grid-template-columns: 1fr 100px; gap: 8px; }
-.vs{ text-align:center; font-size:var(--font-size-small); color:var(--muted); margin:8px 0; }
+  .wrapper{ max-width:800px; margin:20px auto auto auto; padding:0 var(--padding-base); }
 
-input{
-width:100%; padding:12px; border-radius:10px; border:none;
-background:#0d1117; color:#fff; font-size:var(--font-size-base);
-}
+  .section-title {
+    font-size: 14px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-title::after { content:''; flex:1; height:1px; background: var(--border); }
 
-.actions{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px; }
-#addMatchBtn {
-width: 100%; padding: 12px; margin-top: 10px; background: #21262d;
-color: var(--muted); border: 1px dashed #30363d; border-radius: 14px; cursor: pointer;
-}
+  .section{
+    background:var(--panel); border-radius:16px; padding:var(--padding-base);
+    margin-bottom:20px; border: 1px solid var(--border);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
 
-button{ padding:14px; border:none; border-radius:14px; font-size:var(--font-size-base); cursor:pointer; }
-.calc{ background:var(--accent); color:#fff; font-weight: 600; }
-.clear{ background:#21262d; color:#fff; }
+  /* 3-Tab Strategy Styles */
+  .strategy-tabs {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    background: #0d1117; padding: 6px; border-radius: 12px; gap: 4px;
+    margin-bottom: 14px; border: 1px solid var(--border);
+  }
+  .tab-btn {
+    background: none; border: none; color: var(--muted); padding: 12px 6px;
+    font-size: 13px; font-weight: 600; border-radius: 8px; cursor: pointer;
+    text-align: center; line-height: 1.3;
+  }
+  .tab-btn:hover { color: #fff; background: rgba(255,255,255,0.03); }
+  .tab-btn.active {
+    background: var(--card); color: var(--accent);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    border: 1px solid rgba(229, 83, 61, 0.3);
+  }
 
-.summary{
-background:linear-gradient(135deg,#1f2633,#161b22); border-radius:16px;
-padding:var(--padding-base); margin-bottom:16px; border: 1px solid #30363d;
-}
-.summary h2 { margin: 0 0 10px 0; font-size: 18px; color: #fff; }
-.summary div { font-size: 15px; margin-bottom: 6px; color: var(--muted); }
-.summary hr { border: 0; border-top: 1px solid #30363d; margin: 12px 0; }
-.summary .ev-value { font-size: 20px; font-weight: bold; display: block; margin-top: 4px; }
+  /* Match Card Styling */
+  .match{
+    background:var(--card); border-radius:14px; padding:16px; margin-bottom:12px;
+    position: relative; padding-top: 36px; border: 1px solid transparent;
+  }
+  .match:hover { border-color: #384357; }
+  .match-badge {
+    position: absolute; top: 10px; left: 14px; font-size: 11px;
+    color: var(--accent); font-weight: 700; background: var(--accent-dim);
+    padding: 2px 8px; border-radius: 6px;
+  }
 
-.card{
-background:var(--card); border-radius:14px; padding:16px;
-margin-bottom:10px; font-size:var(--font-size-small); position: relative;
-border-left: 4px solid transparent;
-}
+  .remove-match {
+    position: absolute; top: 6px; right: 6px; width: 28px; height: 28px;
+    background: #0d1117; border: 1px solid var(--border); color: var(--muted);
+    border-radius: 50%; font-size: 16px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .remove-match:hover { color: var(--negative); border-color: var(--negative); }
 
-.tag-a { color: var(--color-a); font-weight: bold; }
-.tag-b { color: var(--color-b); font-weight: bold; }
+  .grid-input-group { display: grid; grid-template-columns: 1fr 90px; gap: 8px; }
+  .vs{
+    text-align:center; font-size:11px; font-weight: 800; color:var(--muted);
+    margin:10px 0; display: flex; align-items: center; gap: 10px;
+  }
+  .vs::before, .vs::after { content:''; flex:1; height:1px; background: rgba(139,148,158,0.15); }
 
-.star-btn {
-position: absolute; top: 8px; right: 8px;
-background: rgba(255,255,255,0.05); border-radius: 8px;
-border: none; color: #444; font-size: 20px;
-width: 36px; height: 36px; cursor: pointer;
-display: flex; align-items: center; justify-content: center;
-transition: all 0.2s ease;
-}
-.star-btn.active { color: #ffcc00; background: rgba(255, 204, 0, 0.1); }
+  input{
+    width:100%; padding:12px; border-radius:10px; border: 1px solid var(--border);
+    background:#0d1117; color:#fff; font-size:var(--font-size-base);
+  }
+  input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-dim); }
 
-.positive{ border-left-color: var(--positive); }
-.negative{ border-left-color: var(--negative); }
+  .actions{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:20px; }
+  #addMatchBtn {
+      width: 100%; padding: 14px; margin-top: 4px; background: #21262d;
+      color: #fff; font-weight: 600; border: 1px dashed var(--border); border-radius: 14px; cursor: pointer;
+  }
+  #addMatchBtn:hover { background: #30363d; border-color: var(--muted); }
 
-.metric{ display:flex; justify-content:space-between; margin-top:8px; line-height: 1.4; }
-.metric span{ color:var(--muted); padding-right: 10px; }
-.scenario-label { padding-right: 40px; margin-bottom: 10px; display: block; line-height: 1.6; }
-</style>
+  button{ padding:14px; border:none; border-radius:14px; font-size:var(--font-size-base); cursor:pointer; }
+  .calc{ background:var(--accent); color:#fff; font-weight: 700; letter-spacing: 0.5px; box-shadow: 0 4px 12px rgba(229,83,61,0.3); }
+  .calc:hover { opacity: 0.9; transform: translateY(-1px); }
+  .clear{ background:#21262d; color:var(--muted); border: 1px solid var(--border); }
+  .clear:hover { background: #30363d; color: #fff; }
+
+  /* Output Dashboard Containers */
+  .capture-area {
+    background: #0e1117; padding: 12px; border-radius: 16px; margin-top: 10px;
+  }
+  .summary-header-flex {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;
+  }
+  .share-btn {
+    background: #21262d; color: #fff; font-size: 13px; font-weight: 700;
+    padding: 8px 14px; border-radius: 10px; border: 1px solid var(--border); cursor: pointer;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .share-btn:hover { background: #30363d; border-color: var(--accent); }
+
+  .summary{
+    background: linear-gradient(145deg, #1f2633 0%, #161b22 100%); border-radius: 16px;
+    padding: 20px; margin-bottom: 16px; border: 1px solid var(--border);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+  }
+  .summary h2 { margin: 0 0 14px 0; font-size: 18px; color: #fff; display: flex; align-items: center; gap: 8px; }
+  .summary div { font-size: 14px; margin-bottom: 8px; color: var(--muted); display: flex; justify-content: space-between; }
+  .summary div b { color: #fff; }
+  .summary hr { border: 0; border-top: 1px solid var(--border); margin: 14px 0; }
+  
+  .ev-box-container {
+    background: #0d1117; border-radius: 12px; padding: 12px; border: 1px solid rgba(255,255,255,0.03);
+    text-align: center; margin-top: 10px;
+  }
+  .ev-box-title { color: var(--muted); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  .summary .ev-value { font-size: 26px; font-weight: 800; display: block; margin-top: 2px; }
+
+  /* Beautiful Card Optimization Details */
+  .card{
+    background:var(--card); border-radius:14px; padding:18px;
+    margin-bottom:12px; font-size:var(--font-size-small); position: relative;
+    border: 1px solid var(--border); border-left: 5px solid transparent;
+  }
+  .card.disabled-scenario {
+    opacity: 0.35;
+    border-left-color: #444 !important;
+    background: #11151d;
+  }
+
+  .tag-a { color: var(--color-a); font-weight: bold; background: rgba(255,77,77,0.1); padding: 1px 6px; border-radius: 4px; }
+  .tag-b { color: var(--color-b); font-weight: bold; background: rgba(77,148,255,0.1); padding: 1px 6px; border-radius: 4px; }
+
+  /* Interactive Tracker Star Only (No Text) */
+  .star-select-btn {
+    position: absolute; top: 14px; right: 14px;
+    background: #0d1117; border: 1px solid var(--border); border-radius: 50%;
+    color: var(--muted); font-size: 18px; width: 36px; height: 36px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+  }
+  .star-select-btn:hover { border-color: var(--gold); color: var(--gold); }
+  
+  /* Active Star State & Card Highlight */
+  .card.invested-active {
+    border-color: var(--gold) !important;
+    background: linear-gradient(145deg, #242c3b 0%, #171d26 100%);
+    box-shadow: 0 0 14px rgba(255, 204, 0, 0.12);
+  }
+  .card.invested-active .star-select-btn {
+    background: rgba(255, 204, 0, 0.1); color: var(--gold); border-color: var(--gold);
+  }
+
+  .card-status-badge {
+    display: inline-block; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 5px; margin-bottom: 12px;
+    text-transform: uppercase; letter-spacing: 0.3px;
+  }
+  .badge-active { background: rgba(46,160,67,0.15); color: var(--positive); border: 1px solid rgba(46,160,67,0.2); }
+  .badge-cut { background: rgba(248,81,73,0.15); color: var(--negative); border: 1px solid rgba(248,81,73,0.2); }
+
+  .positive{ border-left-color: var(--positive); }
+  .negative{ border-left-color: var(--negative); }
+  
+  .metric{ display:flex; justify-content:space-between; margin-top:8px; line-height: 1.5; border-bottom: 1px dashed rgba(255,255,255,0.03); padding-bottom: 5px; }
+  .metric:last-child { border-bottom: none; padding-bottom: 0; }
+  .metric span { color:var(--muted); }
+  .scenario-label { padding-right: 50px; margin-bottom: 8px; display: block; line-height: 1.6; font-size: 15px; color: #fff; }
+  
+  .form-group { margin-bottom: 0; }
+  .form-group label { display: block; margin-bottom: 6px; font-weight: 700; font-size: var(--font-size-small); color: var(--muted); text-transform: uppercase; letter-spacing: 0.3px; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  </style>
 </head>
 
 <body onload="initializeMatches()">
+
+<div class="top-navbar">
+  <div class="nav-container">
+    <div class="brand">
+      <div class="brand-logo">PREMIUM</div>
+      <div class="brand-title">
+        <h1>Think Engine Boxing</h1>
+        <p>Premium Strategic Multi-Staking Optimizer</p>
+      </div>
+    </div>
+    
+    <div class="user-menu-wrapper">
+      <button class="user-trigger-btn" onclick="toggleUserDropdown()" id="userBtn" title="ข้อมูลผู้ใช้งาน">
+        <svg class="user-svg-icon" id="defaultUserSvg" viewBox="0 0 24 24">
+          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+        </svg>
+        <img class="avatar-preview-img" id="userAvatarImg" alt="User Profile">
+      </button>
+      
+      <div class="user-dropdown-panel" id="userPanel">
+        <div class="user-info-title">ผู้ใช้งานระบบ</div>
+        <div class="user-name">Sanchez_Rodriguez</div>
+        
+        <div class="upload-avatar-zone">
+          <label class="upload-avatar-label" for="avatarUploadInput">📷 อัปโหลดรูปโปรไฟล์</label>
+          <input type="file" id="avatarUploadInput" accept="image/*" onchange="handleAvatarUpload(this)">
+        </div>
+        
+        <div class="credit-card-box">
+          <div class="credit-label">เครดิตใช้งานคงเหลือ</div>
+          <div class="credit-amount">999,999<span>เครดิต</span></div>
+        </div>
+        
+        <button class="deposit-btn" onclick="alert('ระบบเติมเครดิตเชิงพาณิชย์จะเปิดให้ใช้งานในเวอร์ชันถัดไป')">💳 เติมเครดิตใช้งาน</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="wrapper">
-<div class="header">
-<h1>Think Engine</h1>
-<p>วิเคราะห์ผลตอบแทนและสถิติจุดคุ้มทุน</p>
-</div>
+  
+  <div class="section-title">⚙️ Configuration & Strategy</div>
+  <div class="section">
+    <div class="form-group" style="margin-bottom: 16px;">
+      <label for="totalStakeInput">ทุนรวมทั้งหมด (Total Stake)</label>
+      <input id="totalStakeInput" type="number" step="1" placeholder="ระบุทุนเดิมพันทั้งหมด (เช่น 150)" oninput="saveData()">
+    </div>
+    
+    <label style="display: block; margin-bottom: 6px; font-weight: 700; font-size: var(--font-size-small); color: var(--muted); text-transform: uppercase;">เลือกกลยุทธ์การลงทุน (SELECT STRATEGY)</label>
+    <div class="strategy-tabs">
+      <div class="tab-btn" id="tab-flat" onclick="switchTab('flat')">Equal<br>Stakes</div>
+      <div class="tab-btn" id="tab-dutching" onclick="switchTab('dutching')">Dutching<br>Optimizer</div>
+      <div class="tab-btn" id="tab-weighted" onclick="switchTab('weighted')">Weighted<br>Optimizer</div>
+    </div>
+    <input type="hidden" id="strategySelect" value="dutching">
 
-<div class="section">
-<b>คะแนนเดิมพัน (Stake)</b>
-<input id="totalStakeInput" type="number" step="1" placeholder="ระบุทุนเดิมพัน" oninput="saveData()" style="margin-top:10px;">
-</div>
+    <div class="form-group" style="margin-top: 12px;">
+      <label for="cutScenariosInput">CUT OUT/EV LOW (จำนวนที่จะคัดออกอัตโนมัติ)</label>
+      <input id="cutScenariosInput" type="number" value="2" min="0" placeholder="ระบุจำนวนสายที่จะคัดออก" oninput="saveData()">
+    </div>
+  </div>
 
-<div class="section">
-<b>คู่แข่งขัน / Scenario</b>
-<div id="matches"></div>
-<button id="addMatchBtn" onclick="addMatch()">+ เพิ่มรายการสเต็ป</button>
-</div>
+  <div class="section-title">🥊 การแข่งขัน / เอเชียนแฮนดิแคป</div>
+  <div class="section">
+    <div id="matches"></div>
+    <button id="addMatchBtn" onclick="addMatch()">+ เพิ่มการแข่งขัน</button>
+  </div>
 
-<div class="actions">
-<button class="calc" onclick="calculate()">คำนวณเชิงสถิติ</button>
-<button class="clear" onclick="resetAll()">ล้างค่า</button>
-</div>
+  <div class="actions">
+    <button class="calc" onclick="calculate()">📊 คำนวณเชิงสถิติ</button>
+    <button class="clear" onclick="resetAll()">❌ ล้างค่าทั้งหมด</button>
+  </div>
 
-<div id="result"></div>
+  <div id="result" style="margin-top: 24px;"></div>
 </div>
 
 <script>
 const matchesDiv = document.getElementById("matches");
 const resultDiv = document.getElementById("result");
 const totalStakeInput = document.getElementById("totalStakeInput");
-const LOCAL_STORAGE_KEY = 'thinkEngine_Strategic_V_Final';
+const strategySelect = document.getElementById("strategySelect");
+const cutScenariosInput = document.getElementById("cutScenariosInput");
+const LOCAL_STORAGE_KEY = 'thinkEngine_Strategic_V3_Premium';
 let matchCounter = 0;
 
-function saveData() {
-const matches = document.querySelectorAll(".match");
-let matchData = [];
-matches.forEach(m => {
-const i = m.querySelectorAll("input");
-matchData.push({ id: m.id, A: i[0].value, OddsA: i[1].value, B: i[2].value, OddsB: i[3].value });
+// เปิด-ปิด เมนูผู้ใช้งาน
+function toggleUserDropdown() {
+    document.getElementById("userPanel").classList.toggle("show");
+}
+
+// ปิดเมนูเมื่อคลิกนอกพื้นที่
+window.addEventListener('click', function(e) {
+    if (!document.querySelector('.user-menu-wrapper').contains(e.target)) {
+        document.getElementById("userPanel").classList.remove("show");
+    }
 });
-localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({ stake: totalStakeInput.value, matches: matchData }));
+
+// จัดการระบบอัปโหลดและแลกเปลี่ยนรูปภาพโปรไฟล์ Client-Side
+function handleAvatarUpload(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const base64Img = e.target.result;
+            // บันทึกลง LocalStorage
+            localStorage.setItem('thinkEngine_user_avatar', base64Img);
+            // แสดงผลรูปภาพแทนที่ SVG เดิม
+            applyAvatar(base64Img);
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+function applyAvatar(imgData) {
+    const svgIcon = document.getElementById("defaultUserSvg");
+    const imgPreview = document.getElementById("userAvatarImg");
+    if(imgData) {
+        if(svgIcon) svgIcon.style.display = "none";
+        if(imgPreview) {
+            imgPreview.src = imgData;
+            imgPreview.style.display = "block";
+        }
+    }
+}
+
+function switchTab(strategyValue) {
+    document.getElementById("strategySelect").value = strategyValue;
+    document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+    document.getElementById(`tab-${strategyValue}`).classList.add("active");
+    saveData();
+}
+
+function saveData() {
+    const matches = document.querySelectorAll(".match");
+    let matchData = [];
+    matches.forEach(m => {
+        const i = m.querySelectorAll("input");
+        matchData.push({ id: m.id, A: i[0].value, OddsA: i[1].value, B: i[2].value, OddsB: i[3].value });
+    });
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({ 
+        stake: totalStakeInput.value, 
+        strategy: strategySelect.value,
+        cutCount: cutScenariosInput.value,
+        matches: matchData 
+    }));
 }
 
 function createMatchHTML(id, values = {}) {
-return `
-<div class="match" id="${id}">
-<button class="remove-match" onclick="removeMatch('${id}')">×</button>
-<div class="grid-input-group">
-<input placeholder="Scenario A (แดง)" value="${values.A || ""}" oninput="saveData()">
-<input type="number" step="0.01" placeholder="Odds" value="${values.OddsA || ""}" oninput="saveData()">
-</div>
-<div class="vs">VS</div>
-<div class="grid-input-group">
-<input placeholder="Scenario B (น้ำเงิน)" value="${values.B || ""}" oninput="saveData()">
-<input type="number" step="0.01" placeholder="Odds" value="${values.OddsB || ""}" oninput="saveData()">
-</div>
-</div>`;
+    return `
+    <div class="match" id="${id}">
+        <div class="match-badge">MATCH INDEX</div>
+        <button class="remove-match" onclick="removeMatch('${id}')">×</button>
+        <div class="grid-input-group">
+            <input placeholder="Scenario A (แดง)" value="${values.A || ""}" oninput="saveData()">
+            <input type="number" step="0.01" placeholder="Odds" value="${values.OddsA || ""}" oninput="saveData()">
+        </div>
+        <div class="vs">VS</div>
+        <div class="grid-input-group">
+            <input placeholder="Scenario B (น้ำเงิน)" value="${values.B || ""}" oninput="saveData()">
+            <input type="number" step="0.01" placeholder="Odds" value="${values.OddsB || ""}" oninput="saveData()">
+        </div>
+    </div>`;
 }
 
 function addMatch() {
-const newId = `match-${matchCounter++}`;
-matchesDiv.insertAdjacentHTML('beforeend', createMatchHTML(newId));
-saveData();
+    const newId = `match-${matchCounter++}`;
+    matchesDiv.insertAdjacentHTML('beforeend', createMatchHTML(newId));
+    reindexBadges();
+    saveData();
 }
 
-function removeMatch(id) { document.getElementById(id)?.remove(); saveData(); }
+function removeMatch(id) { 
+    document.getElementById(id)?.remove(); 
+    reindexBadges();
+    saveData(); 
+}
+
+function reindexBadges() {
+    document.querySelectorAll(".match").forEach((m, idx) => {
+        const badge = m.querySelector(".match-badge");
+        if(badge) badge.innerText = `คู่ที่ ${idx + 1}`;
+    });
+}
 
 function initializeMatches() {
-const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
-if (stored) {
-const data = JSON.parse(stored);
-totalStakeInput.value = data.stake || "";
-data.matches.forEach(m => matchesDiv.insertAdjacentHTML('beforeend', createMatchHTML(m.id, m)));
-matchCounter = data.matches.length > 0 ? Math.max(...data.matches.map(m => parseInt(m.id.split('-')[1]))) + 1 : 0;
-} else { for(let i = 0; i < 3; i++) addMatch(); }
+    // โหลดรูปภาพโปรไฟล์เดิมถ้าเคยอัปโหลดไว้
+    const savedAvatar = localStorage.getItem('thinkEngine_user_avatar');
+    if(savedAvatar) {
+        applyAvatar(savedAvatar);
+    }
+
+    const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
+    let activeStrat = "dutching";
+    if (stored) {
+        const data = JSON.parse(stored);
+        totalStakeInput.value = data.stake || "";
+        activeStrat = data.strategy || "dutching";
+        strategySelect.value = activeStrat;
+        cutScenariosInput.value = data.cutCount !== undefined ? data.cutCount : "2";
+        data.matches.forEach(m => matchesDiv.insertAdjacentHTML('beforeend', createMatchHTML(m.id, m)));
+        matchCounter = data.matches.length > 0 ? Math.max(...data.matches.map(m => parseInt(m.id.split('-')[1]))) + 1 : 0;
+    } else { 
+        for(let i = 0; i < 3; i++) addMatch(); 
+    }
+    switchTab(activeStrat);
+    reindexBadges();
 }
 
-function toggleStar(btn) {
-btn.classList.toggle('active');
-btn.innerHTML = btn.classList.contains('active') ? '★' : '☆';
+// ฟังก์ชันเปิด/ปิดดาวเพื่อมาร์กสายตั๋วที่กดแล้ว (เหลือเพียงสัญลักษณ์ดาวตามบรีฟ)
+function toggleInvestedStar(btn, event) {
+    event.stopPropagation();
+    const card = btn.closest(".card");
+    const isInvested = card.classList.toggle("invested-active");
+    btn.innerHTML = isInvested ? "★" : "☆";
+}
+
+// แก้ไขฟังก์ชันอัจฉริยะ Smart Share ปรับสิทธิ์การเข้าถึงข้อมูล Canvas ป้องกันภาพหลุดค้าง
+function exportToImage() {
+    const target = document.getElementById("captureArea");
+    if (!target) return;
+    
+    // ตั้งค่าพารามิเตอร์เพื่อให้ทำงานร่วมกับภาพแบนเนอร์และป้องกันปัญหาการบล็อกออบเจ็กต์รูปภาพ
+    html2canvas(target, {
+        backgroundColor: "#0e1117",
+        scale: 2, 
+        logging: false,
+        useCORS: true,
+        allowTaint: true,
+        foreignObjectRendering: false
+    }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = `ThinkEngine-Result-${new Date().toISOString().slice(0,10)}.png`;
+        link.href = canvas.toDataURL('image/png');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }).catch(err => {
+        alert("เกิดข้อผิดพลาดทางเทคนิคของบราวเซอร์ในการบันทึกภาพ: " + err);
+    });
 }
 
 function calculate(){
-const matches = document.querySelectorAll(".match");
-const totalStake = +totalStakeInput.value;
-let data = [];
+  const matches = document.querySelectorAll(".match");
+  const totalStake = +totalStakeInput.value;
+  const strategy = strategySelect.value;
+  const cutCount = +cutScenariosInput.value || 0;
+  let data = [];
 
-if (totalStake <= 0) {
-resultDiv.innerHTML = `<div style="color:var(--negative); padding:10px;">❌ กรุณากรอก Stake</div>`;
-return;
-}
+  if (totalStake <= 0) {
+      resultDiv.innerHTML = `<div style="color:var(--negative); background:rgba(248,81,73,0.1); border:1px solid var(--negative); padding:14px; border-radius:12px; font-weight:600;">❌ กรุณากรอก ทุนเดิมพันรวม (Total Stake)</div>`;
+      return;
+  }
 
-matches.forEach((m, idx) => {
-const i = m.querySelectorAll("input");
-if (+i[1].value > 1 && +i[3].value > 1) {
-data.push({ A: i[0].value || `คู่ที่ ${idx+1} (A)`, Am: +i[1].value, Pa: 1/+i[1].value, B: i[2].value || `คู่ที่ ${idx+1} (B)`, Bm: +i[3].value, Pb: 1/+i[3].value });
-}
-});
+  matches.forEach((m, idx) => {
+    const i = m.querySelectorAll("input");
+    const oA = +i[1].value;
+    const oB = +i[3].value;
+    
+    if (oA > 1 && oB > 1) {
+      const overround = (1 / oA) + (1 / oB);
+      const trueProbA = (1 / oA) / overround;
+      const trueProbB = (1 / oB) / overround;
+      const trueOddsA = 1 / trueProbA;
+      const trueOddsB = 1 / trueProbB;
 
-if (data.length === 0) return;
+      data.push({ 
+        A: i[0].value || `คู่ที่ ${idx+1} (A)`, 
+        Am: oA, 
+        TruePa: trueProbA, 
+        TrueOddsA: trueOddsA,
+        B: i[2].value || `คู่ที่ ${idx+1} (B)`, 
+        Bm: oB, 
+        TruePb: trueProbB,
+        TrueOddsB: trueOddsB
+      });
+    }
+  });
 
-let scenarios = [];
-let totalAverageEV = 0; let maxGain = -Infinity; let maxLoss = Infinity;
+  if (data.length === 0) return;
+  
+  let scenarios = [];
 
-function walk(idx, htmlLabel, multi, prob){
-if(idx === data.length){
-const ret = multi * totalStake;
-const ev = ret - totalStake;
-const roi = (ev / totalStake) * 100;
-totalAverageEV += ev * prob;
-if (ev > maxGain) maxGain = ev; if (ev < maxLoss) maxLoss = ev;
-scenarios.push({ label: htmlLabel, multi, prob, ev, ret, roi });
-return;
-}
-walk(idx + 1, htmlLabel + `<span class="tag-a">${data[idx].A}</span> | `, multi * data[idx].Am, prob * data[idx].Pa);
-walk(idx + 1, htmlLabel + `<span class="tag-b">${data[idx].B}</span> | `, multi * data[idx].Bm, prob * data[idx].Pb);
-}
+  function walk(idx, htmlLabel, multi, trueProb){
+    if(idx === data.length){
+      const rawEV = (multi * trueProb) - 1; 
+      scenarios.push({ 
+        label: htmlLabel.replace(/ \| $/, ''), 
+        multi, 
+        trueProb, 
+        rawEV, 
+        stake: 0, 
+        ret: 0, 
+        ev: 0, 
+        roi: 0, 
+        active: true 
+      });
+      return;
+    }
+    walk(idx + 1, htmlLabel + `<span class="tag-a">${data[idx].A}</span> | `, multi * data[idx].Am, trueProb * data[idx].TruePa);
+    walk(idx + 1, htmlLabel + `<span class="tag-b">${data[idx].B}</span> | `, multi * data[idx].Bm, trueProb * data[idx].TruePb);
+  }
 
-walk(0, "", 1, 1);
-scenarios.sort((a,b) => b.ev - a.ev);
+  walk(0, "", 1, 1);
 
-resultDiv.innerHTML = `
-<div class="summary">
-<h2>Summary</h2>
-<div>Scenarios: <b>${scenarios.length}</b></div>
-<div>Stake: <b>${totalStake.toFixed(2)} หน่วย</b></div>
-<div>Max Gain: <b style="color:var(--positive)">+${maxGain.toFixed(2)}</b></div>
-<div>Max Loss: <b style="color:var(--negative)">${maxLoss.toFixed(2)}</b></div>
-<hr>
-<span style="color:var(--muted); font-size:14px;">Average Expected Value (EV)</span>
-<span class="ev-value ${totalAverageEV >= 0 ? 'ev-positive' : 'ev-negative'}">${totalAverageEV.toFixed(2)} หน่วย</span>
-</div>
-` + scenarios.map(s => `
-<div class="card ${s.ev >= 0 ? "positive" : "negative"}">
-<button class="star-btn" onclick="toggleStar(this)">☆</button>
-<b class="scenario-label">${s.label.replace(/ \| $/, '')}</b>
-<div class="metric"><span>Probability</span><b>${(s.prob * 100).toFixed(2)}%</b></div>
-<div class="metric"><span>Return (Stake + Profit)</span><b>${totalStake.toFixed(2)} + ${s.ev.toFixed(2)} = ${s.ret.toFixed(2)}</b></div>
-<div class="metric"><span>EV (Net Profit)</span><b style="color:${s.ev >= 0 ? 'var(--positive)' : 'var(--negative)'}">${s.ev.toFixed(2)}</b></div>
-<div class="metric"><span>ROI (%)</span><b style="color:${s.roi >= 0 ? 'var(--positive)' : 'var(--negative)'}">${s.roi.toFixed(2)}%</b></div>
-</div>`).join("");
+  scenarios.sort((a, b) => a.rawEV - b.rawEV);
+  for(let i = 0; i < Math.min(cutCount, scenarios.length); i++) {
+    scenarios[i].active = false;
+  }
+  
+  const activeScenarios = scenarios.filter(s => s.active);
+  const disabledScenarios = scenarios.filter(s => !s.active);
+
+  if (activeScenarios.length > 0) {
+    if (strategy === 'flat') {
+      const stakePerLine = totalStake / activeScenarios.length;
+      activeScenarios.forEach(s => { s.stake = stakePerLine; });
+    } 
+    else if (strategy === 'dutching') {
+      let reciprocalSum = 0;
+      activeScenarios.forEach(s => { reciprocalSum += (1 / s.multi); });
+      activeScenarios.forEach(s => {
+        s.stake = totalStake * ((1 / s.multi) / reciprocalSum);
+      });
+    } 
+    else if (strategy === 'weighted') {
+      activeScenarios.sort((a,b) => b.trueProb - a.trueProb);
+      
+      let remainingStake = totalStake;
+      let totalWeightReciprocal = 0;
+      
+      activeScenarios.forEach((s, index) => {
+         if (index < Math.ceil(activeScenarios.length / 2)) {
+            const targetReturn = totalStake;
+            const requiredStake = targetReturn / s.multi;
+            s.stake = Math.min(requiredStake, remainingStake * 0.4); 
+            remainingStake -= s.stake;
+         } else {
+            totalWeightReciprocal += (1 / s.multi);
+         }
+      });
+      
+      if (remainingStake > 0 && totalWeightReciprocal > 0) {
+         activeScenarios.forEach((s, index) => {
+            if (index >= Math.ceil(activeScenarios.length / 2)) {
+               s.stake = remainingStake * ((1 / s.multi) / totalWeightReciprocal);
+            }
+         });
+      }
+    }
+  }
+
+  let totalAverageEV = 0; 
+  let maxGain = -Infinity; 
+  let maxLoss = 0;
+
+  scenarios.forEach(s => {
+    if (s.active) {
+      s.ret = s.stake * s.multi;
+      s.ev = s.ret - totalStake; 
+      s.roi = (s.ev / totalStake) * 100;
+      totalAverageEV += s.ev * s.trueProb;
+      if (s.ev > maxGain) maxGain = s.ev;
+    } else {
+      s.stake = 0;
+      s.ret = 0;
+      s.ev = -totalStake;
+      s.roi = -100;
+      totalAverageEV += s.ev * s.trueProb;
+    }
+  });
+  
+  const activeEvs = activeScenarios.map(s => s.ev);
+  const minActiveEv = activeEvs.length > 0 ? Math.min(...activeEvs) : -totalStake;
+  maxLoss = disabledScenarios.length > 0 ? -totalStake : minActiveEv;
+
+  activeScenarios.sort((a,b) => b.ev - a.ev);
+  const finalDisplayList = [...activeScenarios, ...disabledScenarios];
+  const winProbability = activeScenarios.reduce((sum, s) => sum + s.trueProb, 0) * 100;
+
+  resultDiv.innerHTML = `
+  <div class="summary-header-flex">
+    <div class="section-title" style="margin-bottom: 0;">📊 Strategic Optimization Analysis</div>
+    <button class="share-btn" onclick="exportToImage()">💾 Save</button>
+  </div>
+  
+  <div id="captureArea" class="capture-area">
+    <div class="summary">
+      <h2>Summary (ข้อมูลภาพรวมสถิติ)</h2>
+      <div>เปิดใช้งานเดิมพัน: <span><b>${activeScenarios.length} สาย</b></span></div>
+      <div>คัดทิ้ง (EV ลบสุด): <span><b style="color:var(--negative)">${disabledScenarios.length} สาย</b></span></div>
+      <div>โอกาสชนะรวมของตั๋ว (Coverage): <span><b style="color:var(--positive)">${winProbability.toFixed(2)}%</b></span></div>
+      <div>ทุนรวมทั้งหมด (Total Stake): <span><b>${totalStake.toFixed(2)} หน่วย</b></span></div>
+      <div>กำไรสุทธิสูงสุด (Max Gain): <span><b style="color:var(--positive)">${maxGain > -Infinity ? '+' + maxGain.toFixed(2) : '0.00'}</b></span></div>
+      <div>ขาดทุนรวมสูงสุด (Max Loss): <span><b style="color:var(--negative)">${maxLoss.toFixed(2)}</b></span></div>
+      <hr>
+      <div class="ev-box-container">
+        <span class="ev-box-title">ค่าน้ำรวมเฉลี่ยคาดหวังจริงต่อตั๋ว (True Expected Value)</span>
+        <span class="ev-value" style="color:${totalAverageEV >= 0 ? 'var(--positive)' : 'var(--negative)'}">
+          ${totalAverageEV.toFixed(2)} หน่วย
+        </span>
+      </div>
+    </div>
+    ` + finalDisplayList.map(s => `
+      <div class="card ${!s.active ? "disabled-scenario" : (s.ev >= 0 ? "positive" : "negative")}">
+        <button class="star-select-btn" onclick="toggleInvestedStar(this, event)">☆</button>
+        <span class="card-status-badge ${s.active ? 'badge-active' : 'badge-cut'}">${s.active ? "ACTIVE RUNNING" : "CUT OUT (EV LOW)"}</span>
+        <b class="scenario-label">${s.label}</b>
+        <div class="metric"><span>True Probability (โอกาสชนะจริงหักน้ำโต๊ะ)</span><b>${(s.trueProb * 100).toFixed(2)}%</b></div>
+        <div class="metric"><span>เงินเดิมพันที่ต้องจ่ายสายนี้ (Auto Stake)</span><b style="color:var(--gold); font-size:14px;">${s.stake.toFixed(2)} หน่วย</b></div>
+        <div class="metric"><span>ค่าน้ำรวมสเต็ปนี้ (Accumulated Odds)</span><b>x${s.multi.toFixed(2)}</b></div>
+        <div class="metric"><span>เงินคืนรวมหากชนะหน้าชิ้นนี้ (Return)</span><b>${s.ret.toFixed(2)}</b></div>
+        <div class="metric"><span>กำไรสุทธิเทียบทุนรวม (Net Profit)</span><b style="color:${s.ev >= 0 ? 'var(--positive)' : 'var(--negative)'}">${s.ev >= 0 ? '+' : ''}${s.ev.toFixed(2)}</b></div>
+        <div class="metric"><span>ROI (%)</span><b style="color:${s.roi >= 0 ? 'var(--positive)' : 'var(--negative)'}">${s.roi >= 0 ? '+' : ''}${s.roi.toFixed(2)}%</b></div>
+      </div>`).join("") + `
+  </div>`;
 }
 
 function resetAll(){ localStorage.removeItem(LOCAL_STORAGE_KEY); location.reload(); }
