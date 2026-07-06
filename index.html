@@ -442,12 +442,12 @@ function createMatchHTML(id, values = {}) {
         <div class="match-badge">MATCH INDEX</div>
         <button class="remove-match" onclick="removeMatch('${id}')">×</button>
         <div class="grid-input-group">
-            <input placeholder="Scenario A (แดง)" value="${values.A || ""}" oninput="saveData()">
+            <input placeholder="นักมวย (มุมแดง)" value="${values.A || ""}" oninput="saveData()">
             <input type="number" step="0.01" placeholder="Odds" value="${values.OddsA || ""}" oninput="saveData()">
         </div>
         <div class="vs">VS</div>
         <div class="grid-input-group">
-            <input placeholder="Scenario B (น้ำเงิน)" value="${values.B || ""}" oninput="saveData()">
+            <input placeholder="นักมวย (มุมน้ำเงิน)" value="${values.B || ""}" oninput="saveData()">
             <input type="number" step="0.01" placeholder="Odds" value="${values.OddsB || ""}" oninput="saveData()">
         </div>
     </div>`;
