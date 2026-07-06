@@ -2,10 +2,10 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimum-scale=1.0">
   <title>Think Engine v3 — Premium Strategic Analysis</title>
   <meta name="description" content="Think Engine — Premium Scenario & Expected Value Analysis Tool">
-  <meta name="theme-color" content="#0e1117">
+  <meta name="theme-color" content="#05070a">
 
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
   <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
@@ -18,276 +18,275 @@
 
   <style>
   :root{
-    --bg:#0e1117;
-    --panel:#161b22;
-    --card:#1f2633;
-    --muted:#8b949e;
-    --accent:#e5533d;
-    --accent-dim: rgba(229, 83, 61, 0.15);
-    --positive:#2ea043;
-    --negative:#f85149;
-    --gold:#ffcc00;
-    --gold-dim: rgba(255, 204, 0, 0.08);
-    --color-a: #ff4d4d;
-    --color-b: #4d94ff;
-    --border:#30363d;
+    --bg:#05070a;
+    --panel:#0d111a;
+    --card:#131824;
+    --muted:#64748b;
+    --accent:#ff5a36;
+    --accent-dim: rgba(255, 90, 54, 0.12);
+    --positive:#10b981;
+    --negative:#f43f5e;
+    --gold:#fbbf24;
+    --gold-dim: rgba(251, 191, 36, 0.06);
+    --color-a: #ff5858;
+    --color-b: #3b82f6;
+    --border: rgba(255, 255, 255, 0.05);
     --font-size-base: 15px;
     --font-size-small: 13px;
-    --padding-base: 16px;
+    --padding-base: 20px;
   }
 
-  *{box-sizing:border-box; transition: all 0.2s ease;}
+  *{box-sizing:border-box; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);}
   
   body{
-    margin:0; font-family:system-ui,-apple-system,sans-serif;
-    background:var(--bg); color:#fff; font-size: var(--font-size-base);
-    padding-bottom: 60px;
+    margin:0; font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, sans-serif;
+    background:var(--bg); color:#f3f4f6; font-size: var(--font-size-base);
+    padding-bottom: 80px; -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
   }
 
-  /* Premium Top Head Bar & User Tab Profile */
+  /* Premium Top Head Bar */
   .top-navbar {
-    background: linear-gradient(90deg, #161b22 0%, #0d1117 100%);
-    border-bottom: 2px solid var(--accent);
-    padding: 12px var(--padding-base);
+    background: linear-gradient(180deg, #111522 0%, #060910 100%);
+    border-bottom: 1px solid rgba(255, 90, 54, 0.3);
+    padding: 16px var(--padding-base);
     position: sticky; top: 0; z-index: 100;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+    backdrop-filter: blur(12px);
   }
   .nav-container {
     max-width: 800px; margin: auto;
     display: flex; justify-content: space-between; align-items: center;
     position: relative;
   }
-  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand { display: flex; align-items: center; gap: 12px; }
   .brand-logo {
-    background: var(--accent); color: #fff; font-weight: 800;
-    padding: 6px 12px; border-radius: 8px; font-size: 14px; letter-spacing: 0.5px;
+    background: linear-gradient(135deg, var(--accent) 0%, #cf3216 100%); 
+    color: #fff; font-weight: 800;
+    padding: 6px 14px; border-radius: 8px; font-size: 13px; letter-spacing: 1px;
+    box-shadow: 0 4px 12px rgba(255, 90, 54, 0.3);
   }
-  .brand-title h1 { margin: 0; font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
-  .brand-title p { margin: 2px 0 0 0; font-size: 11px; color: var(--muted); }
+  .brand-title h1 { margin: 0; font-size: 19px; font-weight: 800; letter-spacing: -0.4px; color: #ffffff; }
+  .brand-title p { margin: 3px 0 0 0; font-size: 11px; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
 
-  /* User Dropdown Profile Styles */
   .user-menu-wrapper { position: relative; }
   
-  /* ขาวล้วนมินิมอล ทันสมัย รองรับรูปภาพแบบ Dynamic */
   .user-trigger-btn {
-    background: #1f2633; border: 1px solid var(--border); color: #fff;
-    width: 42px; height: 42px; border-radius: 50%; cursor: pointer;
+    background: #111622; border: 1px solid var(--border); color: #fff;
+    width: 44px; height: 44px; border-radius: 50%; cursor: pointer;
     display: flex; align-items: center; justify-content: center; padding: 0;
     overflow: hidden; position: relative;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
   }
-  .user-trigger-btn:hover { border-color: var(--accent); background: #263042; }
+  .user-trigger-btn:hover { border-color: var(--accent); background: #151c2c; transform: scale(1.03); }
   
-  /* สไตล์ SVG ขาวล้วน */
-  .user-svg-icon {
-    width: 20px; height: 20px; fill: #ffffff; display: block;
-  }
-  
-  /* ส่วนแสดงผลรูปโปรไฟล์ที่อัปโหลด */
-  .avatar-preview-img {
-    width: 100%; height: 100%; object-fit: cover; display: none;
-  }
+  .user-svg-icon { width: 22px; height: 22px; fill: #e5e7eb; display: block; }
+  .avatar-preview-img { width: 100%; height: 100%; object-fit: cover; display: none; }
   
   .user-dropdown-panel {
-    position: absolute; top: 52px; right: 0; width: 270px;
-    background: #161b22; border: 1px solid var(--border); border-radius: 14px;
-    padding: var(--padding-base); box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-    display: none; z-index: 110;
+    position: absolute; top: 56px; right: 0; width: 280px;
+    background: #0d121f; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px;
+    padding: var(--padding-base); box-shadow: 0 20px 40px rgba(0,0,0,0.7);
+    display: none; z-index: 110; animation: fadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .user-dropdown-panel.show { display: block; animation: fadeIn 0.2s ease-out; }
+  .user-dropdown-panel.show { display: block; }
   
-  .user-info-title { font-size: 13px; color: var(--muted); font-weight: 600; margin-bottom: 4px; }
-  .user-name { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+  .user-info-title { font-size: 11px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .user-name { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
   .user-name::before { content: "🥊"; }
   
-  /* ระบบอัปโหลดรูปภาพโปรไฟล์ */
   .upload-avatar-zone {
-    margin-bottom: 14px; padding: 8px; background: #0d1117; 
-    border: 1px dashed var(--border); border-radius: 8px; text-align: center;
+    margin-bottom: 16px; padding: 10px; background: #060910; 
+    border: 1px dashed var(--border); border-radius: 10px; text-align: center;
   }
-  .upload-avatar-label {
-    display: block; font-size: 12px; color: var(--muted); cursor: pointer; font-weight: 600;
-  }
+  .upload-avatar-label { display: block; font-size: 12px; color: var(--muted); cursor: pointer; font-weight: 600; }
   .upload-avatar-label:hover { color: var(--accent); }
   .upload-avatar-zone input[type="file"] { display: none; }
 
   .credit-card-box {
-    background: linear-gradient(135deg, #1f2633 0%, #11151d 100%);
-    border: 1px solid rgba(255,204,0,0.2); border-radius: 10px; padding: 12px; margin-bottom: 14px;
+    background: linear-gradient(135deg, #171f30 0%, #0a0e17 100%);
+    border: 1px solid rgba(251, 191, 36, 0.15); border-radius: 12px; padding: 14px; margin-bottom: 16px;
   }
-  .credit-label { font-size: 11px; color: var(--gold); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-  .credit-amount { font-size: 22px; font-weight: 800; color: #fff; margin-top: 2px; }
-  .credit-amount span { font-size: 12px; color: var(--muted); font-weight: normal; margin-left: 4px; }
+  .credit-label { font-size: 10px; color: var(--gold); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+  .credit-amount { font-size: 24px; font-weight: 800; color: #ffffff; margin-top: 2px; }
+  .credit-amount span { font-size: 13px; color: var(--muted); font-weight: 500; margin-left: 4px; }
   
   .deposit-btn {
-    width: 100%; padding: 10px; background: var(--positive); color: #fff; border: none;
-    border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; text-align: center;
+    width: 100%; padding: 12px; background: var(--positive); color: #fff; border: none;
+    border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; text-align: center;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
   }
-  .deposit-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  .deposit-btn:hover { opacity: 0.95; transform: translateY(-1px); }
 
-  .wrapper{ max-width:800px; margin:20px auto auto auto; padding:0 var(--padding-base); }
+  .wrapper{ 
+    max-width:800px; margin:28px auto auto auto; padding:0 var(--padding-base);
+    touch-action: pan-y;
+  }
 
   .section-title {
-    font-size: 14px; font-weight: 700; color: var(--muted);
-    text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;
-    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px;
+    display: flex; align-items: center; gap: 10px;
   }
-  .section-title::after { content:''; flex:1; height:1px; background: var(--border); }
+  .section-title::after { content:''; flex:1; height:1px; background: linear-gradient(90deg, var(--border) 0%, transparent 100%); }
 
   .section{
-    background:var(--panel); border-radius:16px; padding:var(--padding-base);
-    margin-bottom:20px; border: 1px solid var(--border);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    background:var(--panel); border-radius: 20px; padding: var(--padding-base);
+    margin-bottom:24px; border: 1px solid var(--border);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
   }
 
-  /* 3-Tab Strategy Styles */
   .strategy-tabs {
     display: grid; grid-template-columns: repeat(3, 1fr);
-    background: #0d1117; padding: 6px; border-radius: 12px; gap: 4px;
-    margin-bottom: 14px; border: 1px solid var(--border);
+    background: #060911; padding: 6px; border-radius: 14px; gap: 6px;
+    margin-bottom: 16px; border: 1px solid var(--border);
   }
   .tab-btn {
-    background: none; border: none; color: var(--muted); padding: 12px 6px;
-    font-size: 13px; font-weight: 600; border-radius: 8px; cursor: pointer;
-    text-align: center; line-height: 1.3;
+    background: none; border: none; color: var(--muted); padding: 12px 4px;
+    font-size: 12px; font-weight: 700; border-radius: 10px; cursor: pointer;
+    text-align: center; line-height: 1.4;
   }
-  .tab-btn:hover { color: #fff; background: rgba(255,255,255,0.03); }
+  .tab-btn:hover { color: #fff; }
   .tab-btn.active {
-    background: var(--card); color: var(--accent);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    border: 1px solid rgba(229, 83, 61, 0.3);
+    background: var(--card); color: #fff;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    position: relative;
+  }
+  .tab-btn.active::after {
+    content: ''; position: absolute; bottom: -2px; left: 25%; width: 50%; height: 2px;
+    background: var(--accent); border-radius: 2px;
   }
 
-  /* Match Card Styling */
   .match{
-    background:var(--card); border-radius:14px; padding:16px; margin-bottom:12px;
-    position: relative; padding-top: 36px; border: 1px solid transparent;
+    background:var(--card); border-radius:16px; padding:18px; margin-bottom:14px;
+    position: relative; padding-top: 40px; border: 1px solid var(--border);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
   }
-  .match:hover { border-color: #384357; }
+  .match:hover { border-color: rgba(255,255,255,0.12); transform: translateY(-1px); }
   .match-badge {
-    position: absolute; top: 10px; left: 14px; font-size: 11px;
-    color: var(--accent); font-weight: 700; background: var(--accent-dim);
-    padding: 2px 8px; border-radius: 6px;
+    position: absolute; top: 12px; left: 16px; font-size: 10px;
+    color: var(--accent); font-weight: 800; background: var(--accent-dim);
+    padding: 3px 10px; border-radius: 6px; letter-spacing: 0.3px;
   }
 
   .remove-match {
-    position: absolute; top: 6px; right: 6px; width: 28px; height: 28px;
-    background: #0d1117; border: 1px solid var(--border); color: var(--muted);
+    position: absolute; top: 8px; right: 8px; width: 28px; height: 28px;
+    background: #060911; border: 1px solid var(--border); color: var(--muted);
     border-radius: 50%; font-size: 16px; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
   }
-  .remove-match:hover { color: var(--negative); border-color: var(--negative); }
+  .remove-match:hover { color: var(--negative); border-color: var(--negative); background: rgba(244,63,94,0.05); }
 
-  .grid-input-group { display: grid; grid-template-columns: 1fr 90px; gap: 8px; }
+  .grid-input-group { display: grid; grid-template-columns: 1fr 95px; gap: 10px; }
   .vs{
-    text-align:center; font-size:11px; font-weight: 800; color:var(--muted);
-    margin:10px 0; display: flex; align-items: center; gap: 10px;
+    text-align:center; font-size:10px; font-weight: 900; color:rgba(255,255,255,0.2);
+    margin:12px 0; display: flex; align-items: center; gap: 12px; letter-spacing: 1px;
   }
-  .vs::before, .vs::after { content:''; flex:1; height:1px; background: rgba(139,148,158,0.15); }
+  .vs::before, .vs::after { content:''; flex:1; height:1px; background: rgba(255,255,255,0.04); }
 
   input{
-    width:100%; padding:12px; border-radius:10px; border: 1px solid var(--border);
-    background:#0d1117; color:#fff; font-size:var(--font-size-base);
+    width:100%; padding:14px; border-radius:12px; border: 1px solid var(--border);
+    background:#060911; color:#fff; font-size:var(--font-size-base);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
   }
-  input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-dim); }
+  input:focus { outline: none; border-color: rgba(255, 90, 54, 0.4); box-shadow: 0 0 0 3px var(--accent-dim); }
 
-  .actions{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:20px; }
+  .actions{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:24px; }
   #addMatchBtn {
-      width: 100%; padding: 14px; margin-top: 4px; background: #21262d;
-      color: #fff; font-weight: 600; border: 1px dashed var(--border); border-radius: 14px; cursor: pointer;
+      width: 100%; padding: 16px; margin-top: 4px; background: #111622;
+      color: #e5e7eb; font-weight: 700; border: 1px dashed rgba(255,255,255,0.1); border-radius: 16px; cursor: pointer;
   }
-  #addMatchBtn:hover { background: #30363d; border-color: var(--muted); }
+  #addMatchBtn:hover { background: #161e2e; border-color: var(--muted); }
 
-  button{ padding:14px; border:none; border-radius:14px; font-size:var(--font-size-base); cursor:pointer; }
-  .calc{ background:var(--accent); color:#fff; font-weight: 700; letter-spacing: 0.5px; box-shadow: 0 4px 12px rgba(229,83,61,0.3); }
-  .calc:hover { opacity: 0.9; transform: translateY(-1px); }
-  .clear{ background:#21262d; color:var(--muted); border: 1px solid var(--border); }
-  .clear:hover { background: #30363d; color: #fff; }
+  button{ padding:16px; border:none; border-radius:16px; font-size:var(--font-size-base); font-weight:700; cursor:pointer; }
+  .calc{ background:linear-gradient(135deg, var(--accent) 0%, #cf3216 100%); color:#fff; letter-spacing: 0.5px; box-shadow: 0 6px 20px rgba(255,90,54,0.25); }
+  .calc:hover { opacity: 0.95; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(255,90,54,0.35); }
+  .clear{ background:#111622; color:var(--muted); border: 1px solid var(--border); }
+  .clear:hover { background: #161e2e; color: #fff; }
 
-  /* Output Dashboard Containers */
+  /* Output Area Dashboard */
   .capture-area {
-    background: #0e1117; padding: 12px; border-radius: 16px; margin-top: 10px;
+    background: #06080c; padding: 4px; border-radius: 20px; margin-top: 12px;
   }
   .summary-header-flex {
-    display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; margin-top: 32px;
   }
   .share-btn {
-    background: #21262d; color: #fff; font-size: 13px; font-weight: 700;
-    padding: 8px 14px; border-radius: 10px; border: 1px solid var(--border); cursor: pointer;
-    display: flex; align-items: center; gap: 6px;
+    background: #111622; color: #fff; font-size: 12px; font-weight: 700;
+    padding: 10px 18px; border-radius: 12px; border: 1px solid var(--border); cursor: pointer;
+    display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   }
-  .share-btn:hover { background: #30363d; border-color: var(--accent); }
+  .share-btn:hover { background: #161e2e; border-color: var(--accent); }
 
-  .summary{
-    background: linear-gradient(145deg, #1f2633 0%, #161b22 100%); border-radius: 16px;
-    padding: 20px; margin-bottom: 16px; border: 1px solid var(--border);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+  .summary {
+    background: radial-gradient(circle at top left, #1c2333 0%, #0d121f 100%); border-radius: 20px;
+    padding: 24px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
   }
-  .summary h2 { margin: 0 0 14px 0; font-size: 18px; color: #fff; display: flex; align-items: center; gap: 8px; }
-  .summary div { font-size: 14px; margin-bottom: 8px; color: var(--muted); display: flex; justify-content: space-between; }
-  .summary div b { color: #fff; }
-  .summary hr { border: 0; border-top: 1px solid var(--border); margin: 14px 0; }
+  .summary h2 { margin: 0 0 18px 0; font-size: 16px; font-weight:800; color: #fff; text-transform:uppercase; letter-spacing:0.8px; display: flex; align-items: center; gap: 8px; }
+  .summary div { font-size: 14px; margin-bottom: 10px; color: #9ca3af; display: flex; justify-content: space-between; align-items: center; }
+  .summary div b { color: #ffffff; font-weight: 700; font-size: 15px; }
+  .summary hr { border: 0; border-top: 1px solid rgba(255,255,255,0.06); margin: 18px 0; }
   
   .ev-box-container {
-    background: #0d1117; border-radius: 12px; padding: 12px; border: 1px solid rgba(255,255,255,0.03);
-    text-align: center; margin-top: 10px;
+    background: rgba(0, 0, 0, 0.4); border-radius: 14px; padding: 16px; border: 1px solid rgba(255,255,255,0.03);
+    text-align: center; margin-top: 14px; backdrop-filter: blur(8px);
   }
-  .ev-box-title { color: var(--muted); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-  .summary .ev-value { font-size: 26px; font-weight: 800; display: block; margin-top: 2px; }
+  .ev-box-title { color: var(--muted); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+  .summary .ev-value { font-size: 28px; font-weight: 900; display: block; margin-top: 4px; letter-spacing: -0.5px; }
 
-  /* Beautiful Card Optimization Details */
   .card{
-    background:var(--card); border-radius:14px; padding:18px;
-    margin-bottom:12px; font-size:var(--font-size-small); position: relative;
-    border: 1px solid var(--border); border-left: 5px solid transparent;
+    background:var(--card); border-radius:18px; padding:20px;
+    margin-bottom:14px; font-size:var(--font-size-small); position: relative;
+    border: 1px solid var(--border); border-left: 6px solid transparent;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
   }
   .card.disabled-scenario {
-    opacity: 0.35;
-    border-left-color: #444 !important;
-    background: #11151d;
+    opacity: 0.28; border-left-color: #374151 !important; background: #0b0e14; box-shadow: none;
   }
 
-  .tag-a { color: var(--color-a); font-weight: bold; background: rgba(255,77,77,0.1); padding: 1px 6px; border-radius: 4px; }
-  .tag-b { color: var(--color-b); font-weight: bold; background: rgba(77,148,255,0.1); padding: 1px 6px; border-radius: 4px; }
+  .tag-a { color: var(--color-a); font-weight: 700; background: rgba(255,88,88,0.08); padding: 2px 7px; border-radius: 5px; }
+  .tag-b { color: var(--color-b); font-weight: 700; background: rgba(59,130,246,0.08); padding: 2px 7px; border-radius: 5px; }
 
-  /* Interactive Tracker Star Only (No Text) */
   .star-select-btn {
-    position: absolute; top: 14px; right: 14px;
-    background: #0d1117; border: 1px solid var(--border); border-radius: 50%;
-    color: var(--muted); font-size: 18px; width: 36px; height: 36px;
+    position: absolute; top: 16px; right: 16px;
+    background: #060911; border: 1px solid var(--border); border-radius: 50%;
+    color: var(--muted); font-size: 16px; width: 38px; height: 38px;
     cursor: pointer; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
   }
-  .star-select-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .star-select-btn:hover { border-color: var(--gold); color: var(--gold); transform: scale(1.05); }
   
-  /* Active Star State & Card Highlight */
   .card.invested-active {
-    border-color: var(--gold) !important;
-    background: linear-gradient(145deg, #242c3b 0%, #171d26 100%);
-    box-shadow: 0 0 14px rgba(255, 204, 0, 0.12);
+    border-color: rgba(251, 191, 36, 0.4) !important;
+    background: linear-gradient(145deg, #18202e 0%, #101520 100%);
+    box-shadow: 0 8px 24px rgba(251, 191, 36, 0.08);
   }
   .card.invested-active .star-select-btn {
-    background: rgba(255, 204, 0, 0.1); color: var(--gold); border-color: var(--gold);
+    background: rgba(251, 191, 36, 0.12); color: var(--gold); border-color: var(--gold);
   }
 
   .card-status-badge {
-    display: inline-block; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 5px; margin-bottom: 12px;
-    text-transform: uppercase; letter-spacing: 0.3px;
+    display: inline-block; font-size: 9px; font-weight: 800; padding: 3px 8px; border-radius: 6px; margin-bottom: 14px;
+    text-transform: uppercase; letter-spacing: 0.5px;
   }
-  .badge-active { background: rgba(46,160,67,0.15); color: var(--positive); border: 1px solid rgba(46,160,67,0.2); }
-  .badge-cut { background: rgba(248,81,73,0.15); color: var(--negative); border: 1px solid rgba(248,81,73,0.2); }
+  .badge-active { background: rgba(16, 185, 129, 0.12); color: var(--positive); border: 1px solid rgba(16, 185, 129, 0.15); }
+  .badge-cut { background: rgba(244, 63, 148, 0.1); color: var(--negative); border: 1px solid rgba(244, 63, 94, 0.15); }
 
   .positive{ border-left-color: var(--positive); }
   .negative{ border-left-color: var(--negative); }
   
-  .metric{ display:flex; justify-content:space-between; margin-top:8px; line-height: 1.5; border-bottom: 1px dashed rgba(255,255,255,0.03); padding-bottom: 5px; }
+  .metric{ display:flex; justify-content:space-between; margin-top:10px; line-height: 1.5; border-bottom: 1px dashed rgba(255,255,255,0.03); padding-bottom: 6px; font-size: 13.5px; }
   .metric:last-child { border-bottom: none; padding-bottom: 0; }
-  .metric span { color:var(--muted); }
-  .scenario-label { padding-right: 50px; margin-bottom: 8px; display: block; line-height: 1.6; font-size: 15px; color: #fff; }
+  .metric span { color:#9ca3af; }
+  .metric b { color: #ffffff; }
+  .scenario-label { padding-right: 50px; margin-bottom: 10px; display: block; line-height: 1.6; font-size: 15px; color: #fff; font-weight: 600; }
   
-  .form-group { margin-bottom: 0; }
-  .form-group label { display: block; margin-bottom: 6px; font-weight: 700; font-size: var(--font-size-small); color: var(--muted); text-transform: uppercase; letter-spacing: 0.3px; }
+  .form-group label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; }
 
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-5px); }
+    from { opacity: 0; transform: translateY(-4px); }
     to { opacity: 1; transform: translateY(0); }
   }
   </style>
@@ -301,7 +300,7 @@
       <div class="brand-logo">PREMIUM</div>
       <div class="brand-title">
         <h1>Think Engine Boxing</h1>
-        <p>Premium Strategic Multi-Staking Optimizer</p>
+        <p>Multi-Staking Optimizer</p>
       </div>
     </div>
     
@@ -337,12 +336,12 @@
   
   <div class="section-title">⚙️ Configuration & Strategy</div>
   <div class="section">
-    <div class="form-group" style="margin-bottom: 16px;">
+    <div class="form-group" style="margin-bottom: 18px;">
       <label for="totalStakeInput">ทุนรวมทั้งหมด (Total Stake)</label>
-      <input id="totalStakeInput" type="number" step="1" placeholder="ระบุทุนเดิมพันทั้งหมด (เช่น 150)" oninput="saveData()">
+      <input id="totalStakeInput" type="number" step="1" placeholder="ระบุจำนวนการลงทุน" oninput="saveData()">
     </div>
     
-    <label style="display: block; margin-bottom: 6px; font-weight: 700; font-size: var(--font-size-small); color: var(--muted); text-transform: uppercase;">เลือกกลยุทธ์การลงทุน (SELECT STRATEGY)</label>
+    <label style="display: block; margin-bottom: 8px; font-weight: 700; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px;">เลือกกลยุทธ์การลงทุน (SELECT STRATEGY)</label>
     <div class="strategy-tabs">
       <div class="tab-btn" id="tab-flat" onclick="switchTab('flat')">Equal<br>Stakes</div>
       <div class="tab-btn" id="tab-dutching" onclick="switchTab('dutching')">Dutching<br>Optimizer</div>
@@ -350,7 +349,7 @@
     </div>
     <input type="hidden" id="strategySelect" value="dutching">
 
-    <div class="form-group" style="margin-top: 12px;">
+    <div class="form-group" style="margin-top: 14px;">
       <label for="cutScenariosInput">CUT OUT/EV LOW (จำนวนที่จะคัดออกอัตโนมัติ)</label>
       <input id="cutScenariosInput" type="number" value="2" min="0" placeholder="ระบุจำนวนสายที่จะคัดออก" oninput="saveData()">
     </div>
@@ -363,11 +362,11 @@
   </div>
 
   <div class="actions">
-    <button class="calc" onclick="calculate()">📊 คำนวณเชิงสถิติ</button>
+    <button class="calc" onclick="calculate(true)">📊 คำนวณเชิงสถิติ</button>
     <button class="clear" onclick="resetAll()">❌ ล้างค่าทั้งหมด</button>
   </div>
 
-  <div id="result" style="margin-top: 24px;"></div>
+  <div id="result"></div>
 </div>
 
 <script>
@@ -379,27 +378,22 @@ const cutScenariosInput = document.getElementById("cutScenariosInput");
 const LOCAL_STORAGE_KEY = 'thinkEngine_Strategic_V3_Premium';
 let matchCounter = 0;
 
-// เปิด-ปิด เมนูผู้ใช้งาน
 function toggleUserDropdown() {
     document.getElementById("userPanel").classList.toggle("show");
 }
 
-// ปิดเมนูเมื่อคลิกนอกพื้นที่
 window.addEventListener('click', function(e) {
     if (!document.querySelector('.user-menu-wrapper').contains(e.target)) {
         document.getElementById("userPanel").classList.remove("show");
     }
 });
 
-// จัดการระบบอัปโหลดและแลกเปลี่ยนรูปภาพโปรไฟล์ Client-Side
 function handleAvatarUpload(input) {
     if (input.files && input.files[0]) {
         const reader = new FileReader();
         reader.onload = function(e) {
             const base64Img = e.target.result;
-            // บันทึกลง LocalStorage
             localStorage.setItem('thinkEngine_user_avatar', base64Img);
-            // แสดงผลรูปภาพแทนที่ SVG เดิม
             applyAvatar(base64Img);
         };
         reader.readAsDataURL(input.files[0]);
@@ -423,6 +417,8 @@ function switchTab(strategyValue) {
     document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
     document.getElementById(`tab-${strategyValue}`).classList.add("active");
     saveData();
+    // ทำการคำนวณใหม่และเลื่อนหน้าจอลงมาอัตโนมัติ (ข้ามเงื่อนไขแจ้งเตือน ทุนเป็น 0)
+    calculate(true); 
 }
 
 function saveData() {
@@ -478,7 +474,6 @@ function reindexBadges() {
 }
 
 function initializeMatches() {
-    // โหลดรูปภาพโปรไฟล์เดิมถ้าเคยอัปโหลดไว้
     const savedAvatar = localStorage.getItem('thinkEngine_user_avatar');
     if(savedAvatar) {
         applyAvatar(savedAvatar);
@@ -497,11 +492,13 @@ function initializeMatches() {
     } else { 
         for(let i = 0; i < 3; i++) addMatch(); 
     }
-    switchTab(activeStrat);
+    
+    // ตั้งค่าแท็บปัจจุบัน
+    document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+    document.getElementById(`tab-${activeStrat}`).classList.add("active");
     reindexBadges();
 }
 
-// ฟังก์ชันเปิด/ปิดดาวเพื่อมาร์กสายตั๋วที่กดแล้ว (เหลือเพียงสัญลักษณ์ดาวตามบรีฟ)
 function toggleInvestedStar(btn, event) {
     event.stopPropagation();
     const card = btn.closest(".card");
@@ -509,14 +506,12 @@ function toggleInvestedStar(btn, event) {
     btn.innerHTML = isInvested ? "★" : "☆";
 }
 
-// แก้ไขฟังก์ชันอัจฉริยะ Smart Share ปรับสิทธิ์การเข้าถึงข้อมูล Canvas ป้องกันภาพหลุดค้าง
 function exportToImage() {
     const target = document.getElementById("captureArea");
     if (!target) return;
     
-    // ตั้งค่าพารามิเตอร์เพื่อให้ทำงานร่วมกับภาพแบนเนอร์และป้องกันปัญหาการบล็อกออบเจ็กต์รูปภาพ
     html2canvas(target, {
-        backgroundColor: "#0e1117",
+        backgroundColor: "#06080c",
         scale: 2, 
         logging: false,
         useCORS: true,
@@ -530,11 +525,12 @@ function exportToImage() {
         link.click();
         document.body.removeChild(link);
     }).catch(err => {
-        alert("เกิดข้อผิดพลาดทางเทคนิคของบราวเซอร์ในการบันทึกภาพ: " + err);
+        alert("เกิดข้อผิดพลาดทางเทคนิคในการบันทึกภาพ: " + err);
     });
 }
 
-function calculate(){
+// เพิ่มพารามิเตอร์ autoScroll เข้ามาควบคุมการเลื่อนหน้าจอลงไปยังสรุป
+function calculate(autoScroll = false) {
   const matches = document.querySelectorAll(".match");
   const totalStake = +totalStakeInput.value;
   const strategy = strategySelect.value;
@@ -542,7 +538,10 @@ function calculate(){
   let data = [];
 
   if (totalStake <= 0) {
-      resultDiv.innerHTML = `<div style="color:var(--negative); background:rgba(248,81,73,0.1); border:1px solid var(--negative); padding:14px; border-radius:12px; font-weight:600;">❌ กรุณากรอก ทุนเดิมพันรวม (Total Stake)</div>`;
+      // ถ้าเป็นการกดสลับแท็บแบบรวดเร็ว และยังไม่ได้กรอกทุน ไม่ต้องแสดง Error แดงๆ กวนใจ
+      if(!autoScroll) {
+         resultDiv.innerHTML = `<div style="color:var(--negative); background:rgba(244,63,94,0.08); border:1px solid rgba(244,63,94,0.15); padding:16px; border-radius:14px; font-weight:600; margin-top:20px;">❌ กรุณากรอก ทุนรวมทั้งหมด (Total Stake)</div>`;
+      }
       return;
   }
 
@@ -673,7 +672,7 @@ function calculate(){
   const winProbability = activeScenarios.reduce((sum, s) => sum + s.trueProb, 0) * 100;
 
   resultDiv.innerHTML = `
-  <div class="summary-header-flex">
+  <div class="summary-header-flex" id="summaryAnchor">
     <div class="section-title" style="margin-bottom: 0;">📊 Strategic Optimization Analysis</div>
     <button class="share-btn" onclick="exportToImage()">💾 Save</button>
   </div>
@@ -701,13 +700,20 @@ function calculate(){
         <span class="card-status-badge ${s.active ? 'badge-active' : 'badge-cut'}">${s.active ? "ACTIVE RUNNING" : "CUT OUT (EV LOW)"}</span>
         <b class="scenario-label">${s.label}</b>
         <div class="metric"><span>True Probability (โอกาสชนะจริงหักน้ำโต๊ะ)</span><b>${(s.trueProb * 100).toFixed(2)}%</b></div>
-        <div class="metric"><span>เงินเดิมพันที่ต้องจ่ายสายนี้ (Auto Stake)</span><b style="color:var(--gold); font-size:14px;">${s.stake.toFixed(2)} หน่วย</b></div>
+        <div class="metric"><span>เงินเดิมพันที่ต้องจ่ายสายนี้ (Auto Stake)</span><b style="color:var(--gold); font-size:14.5px;">${s.stake.toFixed(2)} หน่วย</b></div>
         <div class="metric"><span>ค่าน้ำรวมสเต็ปนี้ (Accumulated Odds)</span><b>x${s.multi.toFixed(2)}</b></div>
         <div class="metric"><span>เงินคืนรวมหากชนะหน้าชิ้นนี้ (Return)</span><b>${s.ret.toFixed(2)}</b></div>
         <div class="metric"><span>กำไรสุทธิเทียบทุนรวม (Net Profit)</span><b style="color:${s.ev >= 0 ? 'var(--positive)' : 'var(--negative)'}">${s.ev >= 0 ? '+' : ''}${s.ev.toFixed(2)}</b></div>
         <div class="metric"><span>ROI (%)</span><b style="color:${s.roi >= 0 ? 'var(--positive)' : 'var(--negative)'}">${s.roi >= 0 ? '+' : ''}${s.roi.toFixed(2)}%</b></div>
       </div>`).join("") + `
   </div>`;
+
+  // เลื่อนหน้าจอลงมาที่หัวข้อ Summary แบบ Smooth นิยมนิยมใช้ใน Native app
+  if(autoScroll) {
+     setTimeout(() => {
+        document.getElementById("summaryAnchor")?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+     }, 80);
+  }
 }
 
 function resetAll(){ localStorage.removeItem(LOCAL_STORAGE_KEY); location.reload(); }
